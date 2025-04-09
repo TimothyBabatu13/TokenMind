@@ -43,12 +43,26 @@ export const SideBar = ({ sidebarOpen, toggleSidebar } : {
 
             <TabsContent value="features" className="flex-1 p-4 space-y-2">
               <SidebarButton 
+                toggleSidebar={toggleSidebar}
                 icon={<TrendingUp className="h-5 w-5" />} 
                 text="Trending Tokens" 
               />
-              <SidebarButton icon={<Search className="h-5 w-5" />} text="Search Tokens" />
-              <SidebarButton icon={<BarChart3 className="h-5 w-5" />} text="X Trending News" />
-              <SidebarButton icon={<Repeat className="h-5 w-5" />} text="Token Swap" />
+              <SidebarButton 
+                icon={<Search className="h-5 w-5" />} 
+                text="Search Tokens"
+                toggleSidebar={toggleSidebar} 
+                />
+              <SidebarButton 
+                icon={<BarChart3 
+                className="h-5 w-5" />} 
+                text="X Trending News" 
+                toggleSidebar={toggleSidebar}
+                />
+              <SidebarButton 
+                icon={<Repeat className="h-5 w-5" />} 
+                text="Token Swap" 
+                toggleSidebar={toggleSidebar}
+                />
             </TabsContent>
 
             <TabsContent value="history" className="flex-1 p-4 space-y-2">

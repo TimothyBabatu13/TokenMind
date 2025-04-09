@@ -1,13 +1,15 @@
 import { Button } from "@/components/ui/button";
 
-export function SidebarButton({ icon, text, propmt } : {
+export function SidebarButton({ icon, text, propmt, toggleSidebar } : {
     icon: React.ReactNode,
     text: string,
-    propmt?: string
+    propmt?: string,
+    toggleSidebar: ()=>void
 }) {
 
     const handleSendMessage = () => {
-        console.log(propmt)
+        console.log(propmt);
+        toggleSidebar()
     }
     return (
       <Button 
