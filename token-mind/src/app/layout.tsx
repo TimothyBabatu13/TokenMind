@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { CivicAuthProvider } from "@civic/auth/nextjs";
+import { CivicAuthProvider } from "@civic/auth-web3/nextjs";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import AuthSession from "@/context/AuthSession";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -27,9 +28,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-          <CivicAuthProvider>
-      {children}
-    </CivicAuthProvider>
+      <CivicAuthProvider>
+        <AuthSession>
+          {children}
+        </AuthSession>
+      </CivicAuthProvider>
       </body>
     </html>
   );

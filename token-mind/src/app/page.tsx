@@ -5,9 +5,9 @@ import { FeatureCard } from "@/components/feature-card"
 import { StepCard } from "@/components/step-card"
 import Image from "next/image"
 import FooterYear from "@/components/footer-date"
-import { UserButton } from "@civic/auth/react"
-// import { TitleBar } from "@/components/test-component"
+import { GetStartedButton } from "@/components/client-buttons"
 
+// "@civic/auth": "^0.4.5",
 const Logo = () => {
   return(
     <Image 
@@ -24,8 +24,7 @@ const Logo = () => {
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
-      <UserButton  className="mt-5 mx-auto"/>
-
+      {/* <UserButton  className="mt-5 mx-auto"/> */}
       <header className="container mx-auto py-6 px-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
           <div className="h-10 w-10 rounded-full bg-gradient-to-r from-purple-600 to-blue-500 flex items-center justify-center">
@@ -45,13 +44,14 @@ export default function LandingPage() {
             FAQ
           </Link>
         </div>
-        <Link 
+        <GetStartedButton />
+        {/* <Link 
           href="/onboarding"
         >
           <Button className="cursor-pointer bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600">
             Get Started
           </Button>
-        </Link>
+        </Link> */}
       </header>
 
       {/* Hero Section */}

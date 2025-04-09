@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@civic/auth": "^0.4.5",
+    "@civic/auth-web3": "^0.5.2",
     "@radix-ui/react-scroll-area": "^1.2.4",
     "@radix-ui/react-slot": "^1.2.0",
     "@radix-ui/react-tabs": "^1.1.4",
@@ -34,3 +34,6 @@
     "typescript": "^5"
   }
 }
+
+
+
