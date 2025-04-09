@@ -1,103 +1,166 @@
-import Image from "next/image";
+import Link from "next/link"
+import { ArrowRight, BarChart3, Search, TrendingUp, Repeat } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { FeatureCard } from "@/components/feature-card"
+import { StepCard } from "@/components/step-card"
+import Image from "next/image"
+import FooterYear from "@/components/footer-date"
 
-export default function Home() {
+const Logo = () => {
+  return(
+    <Image 
+      src={'/logo.png'}
+      height={30}
+      width={30}
+      alt="logo"
+      draggable={false}
+      className="h-full w-full rounded-full"
+    />
+  )
+}
+
+export default function LandingPage() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <header className="container mx-auto py-6 px-4 flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <div className="h-10 w-10 rounded-full bg-gradient-to-r from-purple-600 to-blue-500 flex items-center justify-center">
+            <Logo />
+            {/* <span className="font-bold text-xl">A</span> */}
+          </div>
+          <span className="font-bold text-xl">TokenMind</span>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        <div className="hidden md:flex items-center gap-6">
+          <Link href="#features" className="hover:text-purple-400 transition">
+            Features
+          </Link>
+          <Link href="#how-it-works" className="hover:text-purple-400 transition">
+            How it works
+          </Link>
+          <Link href="#faq" className="hover:text-purple-400 transition">
+            FAQ
+          </Link>
+        </div>
+        <Link 
+          href="/onboarding"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+          <Button className="cursor-pointer bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600">
+            Get Started
+          </Button>
+        </Link>
+      </header>
+
+      {/* Hero Section */}
+      <section className="container mx-auto px-4 py-20 flex flex-col items-center text-center">
+        <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-blue-400 to-purple-400">
+          Your AI Crypto Assistant
+        </h1>
+        <p className="text-xl text-gray-300 max-w-2xl mb-10">
+          Discover trending tokens, get real-time news, and swap tokens seamlessly with our intelligent AI agent.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4">
+          <Link href="/onboarding">
+            <Button
+              size="lg"
+              className="cursor-pointer bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"
+            >
+              Get Started <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </Link>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section id="features" className="container mx-auto px-4 py-20">
+        <h2 className="text-3xl md:text-4xl font-bold mb-16 text-center">
+          Powerful <span className="text-purple-400">Features</span>
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <FeatureCard
+            icon={<TrendingUp className="h-10 w-10 text-purple-400" />}
+            title="Trending Tokens"
+            description="Discover the hottest tokens in the market with real-time trending data."
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+          <FeatureCard
+            icon={<Search className="h-10 w-10 text-blue-400" />}
+            title="Token Search"
+            description="Find detailed information about any token with our powerful search."
           />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
+          <FeatureCard
+            icon={<BarChart3 className="h-10 w-10 text-purple-400" />}
+            title="X Trending News"
+            description="Stay updated with the latest crypto news trending on X (Twitter)."
           />
-          Go to nextjs.org →
-        </a>
+          <FeatureCard
+            icon={<Repeat className="h-10 w-10 text-blue-400" />}
+            title="Token Swaps"
+            description="Swap between tokens seamlessly with our integrated exchange."
+          />
+        </div>
+      </section>
+
+      {/* How it Works */}
+      <section id="how-it-works" className="container mx-auto px-4 py-20">
+        <h2 className="text-3xl md:text-4xl font-bold mb-16 text-center">
+          How It <span className="text-purple-400">Works</span>
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <StepCard number="01" title="Sign Up" description="Create your account in seconds and connect your wallet." />
+          <StepCard
+            number="02"
+            title="Chat with AI"
+            description="Ask questions, get token info, or request market analysis."
+          />
+          <StepCard number="03" title="Trade & Track" description="Swap tokens and track your portfolio performance." />
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="container mx-auto px-4 py-20">
+        <div className="bg-gradient-to-r from-purple-900/50 to-blue-900/50 rounded-3xl p-10 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to revolutionize your crypto experience?</h2>
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-10">
+            Join thousands of traders using our AI assistant to make smarter decisions.
+          </p>
+          <Link href="/onboarding">
+            <Button
+              size="lg"
+              className="bg-gradient-to-r cursor-pointer from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"
+            >
+              Get Started Now <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </Link>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="container mx-auto px-4 py-10 border-t border-gray-800">
+        <div className="flex flex-col md:flex-row justify-between items-center">
+          <div className="flex items-center gap-2 mb-6 md:mb-0">
+            <div className="h-8 w-8 rounded-full bg-gradient-to-r from-purple-600 to-blue-500 flex items-center justify-center">
+              <Logo />
+              {/* <span className="font-bold text-sm">A</span> */}
+            </div>
+            <span className="font-bold text-xl">TokenMind</span>
+          </div>
+          <div className="flex gap-6 mb-6 md:mb-0">
+            <Link href="#" className="text-gray-400 hover:text-white transition">
+              Terms
+            </Link>
+            <Link href="#" className="text-gray-400 hover:text-white transition">
+              Privacy
+            </Link>
+            <Link href="#" className="text-gray-400 hover:text-white transition">
+              Contact
+            </Link>
+          </div>
+          <div className="text-gray-400 text-sm">© <FooterYear /> TokenAI. All rights reserved.</div>
+        </div>
       </footer>
     </div>
-  );
+  )
 }
+
+
+
