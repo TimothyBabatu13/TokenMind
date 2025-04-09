@@ -2,7 +2,13 @@
 import { useUser } from "@civic/auth-web3/react";
 import { Button } from "./ui/button";
 
-export function GetStartedButton() {
+interface GetStartedButtonProps {
+
+}
+export function GetStartedButton({ children, text } : {
+    children?: React.ReactNode,
+    text: string
+}) {
   const { signIn } = useUser();
   const handleSignIn = async () => {
     await signIn()
@@ -12,7 +18,8 @@ export function GetStartedButton() {
         className="cursor-pointer bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"
         onClick={handleSignIn}
     >
-        Get Started
+        {text}
+        {children}
     </Button>
   );
 };

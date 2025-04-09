@@ -44,7 +44,7 @@ export default function LandingPage() {
             FAQ
           </Link>
         </div>
-        <GetStartedButton />
+        <GetStartedButton text="Get Started" />
         {/* <Link 
           href="/onboarding"
         >
@@ -63,14 +63,17 @@ export default function LandingPage() {
           Discover trending tokens, get real-time news, and swap tokens seamlessly with our intelligent AI agent.
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
-          <Link href="/onboarding">
+          <GetStartedButton text="Get Started">
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </GetStartedButton>
+          {/* <Link href="/onboarding">
             <Button
               size="lg"
               className="cursor-pointer bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"
             >
               Get Started <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-          </Link>
+          </Link> */}
         </div>
       </section>
 
@@ -126,14 +129,17 @@ export default function LandingPage() {
           <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-10">
             Join thousands of traders using our AI assistant to make smarter decisions.
           </p>
-          <Link href="/onboarding">
+          <GetStartedButton text="Get Started Now">
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </GetStartedButton>
+          {/* <Link href="/onboarding">
             <Button
               size="lg"
               className="bg-gradient-to-r cursor-pointer from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"
             >
               Get Started Now <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-          </Link>
+          </Link> */}
         </div>
       </section>
 
