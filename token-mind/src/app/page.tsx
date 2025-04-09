@@ -1,6 +1,5 @@
 import Link from "next/link"
 import { ArrowRight, BarChart3, Search, TrendingUp, Repeat } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { FeatureCard } from "@/components/feature-card"
 import { StepCard } from "@/components/step-card"
 import Image from "next/image"
