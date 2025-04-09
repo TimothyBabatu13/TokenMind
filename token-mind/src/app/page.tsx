@@ -5,25 +5,12 @@ import { StepCard } from "@/components/step-card"
 import Image from "next/image"
 import FooterYear from "@/components/footer-date"
 import { GetStartedButton } from "@/components/client-buttons"
+import Logo from "@/components/Logo"
 
-// "@civic/auth": "^0.4.5",
-const Logo = () => {
-  return(
-    <Image 
-      src={'/logo.png'}
-      height={30}
-      width={30}
-      alt="logo"
-      draggable={false}
-      className="h-full w-full rounded-full"
-    />
-  )
-}
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
-      {/* <UserButton  className="mt-5 mx-auto"/> */}
       <header className="container mx-auto py-6 px-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
           <div className="h-10 w-10 rounded-full bg-gradient-to-r from-purple-600 to-blue-500 flex items-center justify-center">
@@ -44,13 +31,6 @@ export default function LandingPage() {
           </Link>
         </div>
         <GetStartedButton text="Get Started" />
-        {/* <Link 
-          href="/onboarding"
-        >
-          <Button className="cursor-pointer bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600">
-            Get Started
-          </Button>
-        </Link> */}
       </header>
 
       {/* Hero Section */}
@@ -65,14 +45,6 @@ export default function LandingPage() {
           <GetStartedButton text="Get Started">
             <ArrowRight className="ml-2 h-5 w-5" />
           </GetStartedButton>
-          {/* <Link href="/onboarding">
-            <Button
-              size="lg"
-              className="cursor-pointer bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"
-            >
-              Get Started <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </Link> */}
         </div>
       </section>
 
@@ -131,14 +103,6 @@ export default function LandingPage() {
           <GetStartedButton text="Get Started Now">
             <ArrowRight className="ml-2 h-5 w-5" />
           </GetStartedButton>
-          {/* <Link href="/onboarding">
-            <Button
-              size="lg"
-              className="bg-gradient-to-r cursor-pointer from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"
-            >
-              Get Started Now <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </Link> */}
         </div>
       </section>
 
@@ -163,7 +127,7 @@ export default function LandingPage() {
               Contact
             </Link>
           </div>
-          <div className="text-gray-400 text-sm">© <FooterYear /> TokenAI. All rights reserved.</div>
+          <div className="text-gray-400 text-sm">© <FooterYear /> TokenMind. All rights reserved.</div>
         </div>
       </footer>
     </div>

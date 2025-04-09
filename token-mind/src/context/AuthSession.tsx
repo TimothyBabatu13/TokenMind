@@ -1,17 +1,11 @@
 'use client';
-import { useUser } from "@civic/auth-web3/react";
+// import { useUser } from "@civic/auth-web3/react";
 
 const AuthSession =  ({children } : {
     children: React.ReactNode
 }) => {
 
-    const user = useUser();
-    if(user) {
-        // console.log(user)
-        // redirect('/chat');
-        
-    }
-    
+    // const user = useUser();
   return (
     <div>
         {children}

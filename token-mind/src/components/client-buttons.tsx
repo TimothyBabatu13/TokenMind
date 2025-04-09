@@ -7,9 +7,11 @@ export function GetStartedButton({ children, text } : {
     text: string
 }) {
   const { signIn } = useUser();
+
   const handleSignIn = async () => {
     await signIn()
   }
+  
   return (
     <Button 
         className="cursor-pointer bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"
