@@ -101,7 +101,7 @@ import { useChatProvider } from "@/context/chat-context"
         toggleSidebar={toggleSidebar}
       />
 
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col max-h-[100vh] overflow-y-hidden">
         <header className="p-4 border-b border-gray-800 flex items-center">
           <Button 
             variant="ghost" 
@@ -116,7 +116,7 @@ import { useChatProvider } from "@/context/chat-context"
 
 
         {/* Chat Area */}
-        <ScrollArea className="flex-1 p-4">
+        <ScrollArea className="flex-1 p-4 overflow-y-scroll scroll-area">
           <div className="max-w-3xl mx-auto space-y-6">
             {messages.map((message, index) => (
               <div key={index} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
