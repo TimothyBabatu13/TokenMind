@@ -1,15 +1,19 @@
 import { Button } from "@/components/ui/button";
+import { useChatProvider } from "@/context/chat-context";
 
 export function SidebarButton({ icon, text, propmt, toggleSidebar } : {
     icon: React.ReactNode,
     text: string,
-    propmt?: string,
+    propmt: string,
     toggleSidebar: ()=>void
 }) {
 
+    const h = useChatProvider();
     const handleSendMessage = () => {
-        console.log(propmt);
         toggleSidebar()
+        console.log(propmt);
+        h?.setText(propmt)
+        //send dispatch down here to handle it
     }
     return (
       <Button 

@@ -9,7 +9,13 @@ export function GetStartedButton({ children, text } : {
   const { signIn } = useUser();
 
   const handleSignIn = async () => {
-    await signIn()
+    try {
+      
+      const res = await signIn()
+      console.log(res)
+    } catch (error) {
+      console.log(error)
+    }
   }
   
   return (

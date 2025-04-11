@@ -8,9 +8,11 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { SideBar } from "./components/side-bar"
 import Logo from "@/components/Logo"
+import { useChatProvider } from "@/context/chat-context"
 
 
  function ChatPage() {
+  const chatProvider = useChatProvider();
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
   const [messages, setMessages] = useState([
     {
@@ -34,14 +36,18 @@ import Logo from "@/components/Logo"
     scrollToBottom()
   }, [messages])
 
+  useEffect(()=>{
+    if(chatProvider?.text.length){
+      SendMessage(chatProvider.text)
+      chatProvider.setText('');
+    }
+  }, [chatProvider])
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }
 
-  const handleSendMessage = (e : FormEvent) => {
-    e.preventDefault()
-    if (!inputValue.trim()) return
-
+  const SendMessage = (inputValue: string) => {
     // Add user message
     setMessages([...messages, { role: "user", content: inputValue }])
 
@@ -73,6 +79,13 @@ import Logo from "@/components/Logo"
       setMessages((prev) => [...prev, { role: "assistant", content: response }])
     }, 1000)
 
+  }
+  const handleSendMessage = (e : FormEvent) => {
+    e.preventDefault()
+    if (!inputValue.trim()) return
+
+    // Add user message
+    SendMessage(inputValue);
     setInputValue("")
   }
 

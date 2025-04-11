@@ -11,6 +11,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
       <header className="container mx-auto py-6 px-4 flex justify-between items-center">
+        {/* <Link href={'/chat'}>Chat</Link> */}
         <div className="flex items-center gap-2">
           <div className="h-10 w-10 rounded-full bg-gradient-to-r from-purple-600 to-blue-500 flex items-center justify-center">
             <Logo />
