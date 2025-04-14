@@ -7,15 +7,15 @@ const AuthSession =  ({children } : {
     children: React.ReactNode
 }) => {
 
+  const router = useRouter();
+
   const handleSignIn = () : void => {
-    const url = '/chat';
-    const router = useRouter();
+    const url = '/chat';  
     router.push(url);
   }
   
   const handleSignout = () : void => {
     const url = '/';
-    const router = useRouter();
     router.replace(url);
   }
 
