@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { CivicAuthProvider } from "@civic/auth-web3/nextjs";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AuthSession from "@/context/AuthSession";
@@ -49,11 +48,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-      <CivicAuthProvider>
         <AuthSession>
           {children}
         </AuthSession>
-      </CivicAuthProvider>
       </body>
     </html>
   );

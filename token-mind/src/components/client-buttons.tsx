@@ -10,7 +10,6 @@ export function GetStartedButton({ children, text } : {
 
   const handleSignIn = async () => {
     try {
-      
       const res = await signIn()
       console.log(res)
     } catch (error) {

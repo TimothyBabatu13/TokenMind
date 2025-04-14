@@ -1,15 +1,38 @@
 'use client';
-// import { useUser } from "@civic/auth-web3/react";
+
+import { CivicAuthProvider } from "@civic/auth-web3/nextjs";
+import { useRouter } from "next/navigation";
 
 const AuthSession =  ({children } : {
     children: React.ReactNode
 }) => {
 
-    // const user = useUser();
+  const handleSignIn = () : void => {
+    const url = '/chat';
+    const router = useRouter();
+    router.push(url);
+  }
+  
+  const handleSignout = () : void => {
+    const url = '/';
+    const router = useRouter();
+    router.replace(url);
+  }
+
   return (
-    <div>
+    <CivicAuthProvider 
+      onSignIn={(error) => {
+        if(error){
+          console.log(error);
+        }
+        else{
+          handleSignIn();
+        }
+      }}
+      onSessionEnd={handleSignout}
+      >
         {children}
-    </div>
+    </CivicAuthProvider>
   )
 }
 

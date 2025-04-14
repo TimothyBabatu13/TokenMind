@@ -4,11 +4,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BarChart3, LogOut, Repeat, Search, Settings, TrendingUp, User, X } from "lucide-react"
 import { SidebarButton } from "./side-bar-button"
 import UserInfo from "./user-info"
+import { useUser } from "@civic/auth-web3/react"
 
 export const SideBar = ({ sidebarOpen, toggleSidebar } : {
     sidebarOpen: boolean,
     toggleSidebar: ()=>void,
 }) => {
+  
+    const { signOut } = useUser();
+    const handleLogOut = async () => {
+      await signOut();
+    }
     return(
     <div
         className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-800 transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 ${
@@ -97,6 +103,7 @@ export const SideBar = ({ sidebarOpen, toggleSidebar } : {
                 variant="outline" 
                 size="sm" 
                 className="flex-1 border-gray-700 cursor-pointer"
+                onClick={handleLogOut}
               >
                 <LogOut className="h-4 w-4 mr-1" /> Logout
               </Button>
