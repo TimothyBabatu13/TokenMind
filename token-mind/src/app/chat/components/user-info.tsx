@@ -28,7 +28,7 @@ const UserInfo = () => {
 //3cgQdBdKQEVMdfnNFgjD2SAXPFsGb8HUEHT9GvXsCPxR
 
 useEffect(()=>{
-  console.log(userContext)
+  // console.log(userContext)
   getWalletAddress()
 }, 
 [userContext])

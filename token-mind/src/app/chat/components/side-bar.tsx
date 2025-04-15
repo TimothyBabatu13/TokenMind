@@ -22,7 +22,7 @@ export const SideBar = ({ sidebarOpen, toggleSidebar } : {
 
     
     const createWallet = async () => {
-      console.log(userContext.user)
+      // console.log(userContext.user)
       if (userContext.user && !userHasWallet(userContext)) {
         await userContext.createWallet();
       }
