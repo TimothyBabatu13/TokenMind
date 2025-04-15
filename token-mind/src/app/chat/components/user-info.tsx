@@ -2,8 +2,7 @@
 
 import { userHasWallet } from "@civic/auth-web3";
 import { useUser } from "@civic/auth-web3/react";
-import { Copy, User } from "lucide-react";
-import Image from "next/image";
+import { Copy, User } from "lucide-react";;
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
