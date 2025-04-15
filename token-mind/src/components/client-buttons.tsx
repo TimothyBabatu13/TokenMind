@@ -8,7 +8,6 @@ export function GetStartedButton({ children, text } : {
     text: string
 }) {
   const { signIn } = useUser();
-  const u = useRouter()
 
   const handleSignIn = async () => {
     try {
