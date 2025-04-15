@@ -1,20 +1,17 @@
 import Logo from "@/components/Logo"
 import { cn } from "@/lib/utils"
-import { CSSProperties, FC, ReactNode } from "react"
+import { CSSProperties, ReactNode } from "react"
 
 interface AnimatedShinyTextProps {
     children: ReactNode;
     className?: string;
     shimmerWidth?: number;
   }
+  
 const AnimatedShinyText = ({children,className,shimmerWidth = 100} : AnimatedShinyTextProps) => {
     return(
-        <p
-      style={
-        {
-          "--shiny-width": `${shimmerWidth}px`,
-        } as CSSProperties
-      }
+    <p
+    style={{ "--shiny-width": `${shimmerWidth}px`,} as CSSProperties}
       className={cn(
         "text-white dark:text-neutral-400/70 w-fit",
 
