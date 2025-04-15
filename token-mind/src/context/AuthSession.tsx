@@ -24,6 +24,7 @@ const AuthSession =  ({children } : {
 
   return (
     <CivicAuthProvider 
+      // iframeMode="embedded"
       onSignIn={(error) => {
         if(error){
           console.log(error);

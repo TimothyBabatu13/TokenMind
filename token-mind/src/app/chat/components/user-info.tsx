@@ -19,8 +19,7 @@ const UserInfo = () => {
     const copyToClipBoard = async () => {
       if(walletAddress) {
         navigator.clipboard.writeText(walletAddress);
-        toast("Event has been created.")
-        console.log('hi')
+        toast("Wallet address copied");
       }
       
     }
