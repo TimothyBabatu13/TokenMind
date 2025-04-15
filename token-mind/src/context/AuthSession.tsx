@@ -24,12 +24,19 @@ const AuthSession =  ({children } : {
       onSignIn={(error) => {
         if(error){
           console.log(error);
+          alert('error'+ error.message)
+          console.log('error')
         }
         else{
           handleSignIn();
+          alert('Login succesful')
+          console.log('login')
         }
       }}
       onSessionEnd={handleSignout}
+      onSignOut={async()=>{
+        console.log('hi')
+      }}
       >
         {children}
     </CivicAuthProvider>

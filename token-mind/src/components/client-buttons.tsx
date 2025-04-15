@@ -1,19 +1,20 @@
 'use client'
 import { useUser } from "@civic/auth-web3/react";
 import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 
 export function GetStartedButton({ children, text } : {
     children?: React.ReactNode,
     text: string
 }) {
   const { signIn } = useUser();
+  const u = useRouter()
 
   const handleSignIn = async () => {
     try {
-      const res = await signIn()
-      console.log(res)
+      await signIn()
     } catch (error) {
-      console.log(error)
+      console.log('error:',error)
     }
   }
   

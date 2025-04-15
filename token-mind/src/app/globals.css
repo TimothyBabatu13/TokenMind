@@ -127,3 +127,51 @@ body{
 .scroll-area::-webkit-scrollbar {
   display: none;
 }
+
+/* @keyframes shiny--text {
+  0% {
+    background-position: 'calc(-100% - var(--shiny-width)) 0'
+  }
+  30% {
+    background-position': calc(100% + var(--shiny-width)) 0
+  }
+  60%{
+
+  }
+  90%{
+
+  }
+  100%{
+
+  } */
+  /* '0%, 90%, 100%': {
+    'background-position': 'calc(-100% - var(--shiny-width)) 0'
+  },
+  '30%, 60%': {
+    'background-position': 'calc(100% + var(--shiny-width)) 0'
+  } */
+/* } */
+/* .shiny-text {
+  animation: shiny--text 8s infinite;
+
+} */
+
+/* animation: {
+  'shiny-text': 'shiny-text 8s infinite',
+  'border-beam': 'border-beam calc(var(--duration)*1s) infinite linear'
+},
+keyframes: {
+  'shiny-text': {
+    '0%, 90%, 100%': {
+      'background-position': 'calc(-100% - var(--shiny-width)) 0'
+    },
+    '30%, 60%': {
+      'background-position': 'calc(100% + var(--shiny-width)) 0'
+    }
+  },
+  'border-beam': {
+    '100%': {
+      'offset-distance': '100%'
+    }
+  }
+} */
