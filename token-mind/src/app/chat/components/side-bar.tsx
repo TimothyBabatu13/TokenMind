@@ -1,20 +1,42 @@
 import Logo from "@/components/Logo"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { BarChart3, LogOut, Repeat, Search, Settings, TrendingUp, User, X } from "lucide-react"
+import { BarChart3, LogOut, Repeat, Search, Settings, TrendingUp, X } from "lucide-react"
 import { SidebarButton } from "./side-bar-button"
 import UserInfo from "./user-info"
 import { useUser } from "@civic/auth-web3/react"
+import { userHasWallet } from "@civic/auth-web3"
+import { useEffect } from "react"
 
 export const SideBar = ({ sidebarOpen, toggleSidebar } : {
     sidebarOpen: boolean,
     toggleSidebar: ()=>void,
 }) => {
   
-    const { signOut } = useUser();
+  
+    
+    const userContext = useUser();
     const handleLogOut = async () => {
-      await signOut();
+      userContext.signOut();
     }
+
+    
+    const createWallet = async () => {
+      console.log(userContext.user)
+      if (userContext.user && !userHasWallet(userContext)) {
+        await userContext.createWallet();
+      }
+      if(userHasWallet(userContext)){
+        // userContext.solana.wallet;
+        // setWalletAddress(userContext.solana.address)
+      }
+    }
+
+    useEffect(()=>{
+      createWallet()
+    }, [userContext])
+
+    
     return(
     <div
         className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-800 transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 ${
@@ -84,12 +106,7 @@ export const SideBar = ({ sidebarOpen, toggleSidebar } : {
           {/* User Section */}
           <div className="p-4 border-t border-gray-700">
             <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center">
-                <div className="h-8 w-8 rounded-full bg-gray-700 mr-2 flex items-center justify-center">
-                  <User className="h-4 w-4" />
-                </div>
-                <UserInfo />
-              </div>
+              <UserInfo />
             </div>
             <div className="flex gap-2 text-black">
               <Button 

@@ -10,13 +10,16 @@ const AuthSession =  ({children } : {
   const router = useRouter();
 
   const handleSignIn = () : void => {
+    console.log('sign in')
     const url = '/chat';  
     router.push(url);
   }
   
   const handleSignout = () : void => {
+    console.log('signout')
     const url = '/';
     router.replace(url);
+
   }
 
   return (
