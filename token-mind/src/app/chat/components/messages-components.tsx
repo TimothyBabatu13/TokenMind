@@ -12,7 +12,7 @@ export const ViewMessage = ({ messages } : ViewMessageType) => {
         {messages.map(message => (
                 <div 
                   key={message.id}
-                  className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+                  // className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
                 >
                   {message.parts.map((part) => {
                     switch (part.type) {
