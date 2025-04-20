@@ -25,9 +25,11 @@ export const SideBar = ({ sidebarOpen, toggleSidebar } : {
       // console.log(userContext.user)
       if (userContext.user && !userHasWallet(userContext)) {
         await userContext.createWallet();
+ 
       }
       if(userHasWallet(userContext)){
         // userContext.solana.wallet;
+        // userContext.solana.wallet.connect();
         // setWalletAddress(userContext.solana.address)
       }
     }

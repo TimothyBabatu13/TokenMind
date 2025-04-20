@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useChatProvider } from "@/context/chat-context";
+import { useChat } from "@ai-sdk/react";
 
 export function SidebarButton({ icon, text, propmt, toggleSidebar } : {
     icon: React.ReactNode,
@@ -8,12 +9,15 @@ export function SidebarButton({ icon, text, propmt, toggleSidebar } : {
     toggleSidebar: ()=>void
 }) {
 
-    const h = useChatProvider();
+    const { handleSubmit } = useChat();
+    // const h = useChatProvider();
     const handleSendMessage = () => {
         toggleSidebar()
-        console.log(propmt);
-        h?.setText(propmt)
+        // console.log(propmt);
+        // h?.setText(propmt)
         //send dispatch down here to handle it
+        // handleSubmit(propmt)
+        console.log(propmt)
     }
     return (
       <Button 
