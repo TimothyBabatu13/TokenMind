@@ -19,7 +19,7 @@ export const ViewMessage = ({ messages } : ViewMessageType) => {
                       case 'text': {
                         return(
                         <div
-                          className={`max-w-[80%] rounded-2xl p-4 ${
+                          className={`max-w-[80%] rounded-2xl p-4 flex ${message.role === "user" ? "justify-end" : "justify-start"} ${
                           message.role === "user" ? "bg-purple-600 rounded-tr-none" : "bg-gray-800 rounded-tl-none"
                         }`}
                       >
@@ -68,6 +68,7 @@ export const ViewMessage = ({ messages } : ViewMessageType) => {
                                       <GetTrendingTokenUI
                                         data={part.toolInvocation.result['result']['body']['tokens']}
                                       />
+                                      
                                       {/* {JSON.stringify(part.toolInvocation.result['result']['body']['tokens'])} */}
                                     </div>
                                   );
