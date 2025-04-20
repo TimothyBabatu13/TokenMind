@@ -5,7 +5,7 @@ import { StepCard } from "@/components/step-card"
 import FooterYear from "@/components/footer-date"
 import { GetStartedButton } from "@/components/client-buttons"
 import Logo from "@/components/Logo"
-import { RedirectToChat } from "@/components/server-page"
+// import { RedirectToChat } from "@/components/server-page"
 
 
 export default function LandingPage() {

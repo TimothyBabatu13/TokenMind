@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Copy, Check } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
+// import { Skeleton } from "@/components/ui/skeleton"
 
 type TokenInfo = {
     address: string;
@@ -21,7 +21,7 @@ type TokenInfo = {
     minted_at: string | null;
     extensions: {
       coingeckoId?: string;
-      [key: string]: any;
+      // [key: string]: string;
     };
   };
   
