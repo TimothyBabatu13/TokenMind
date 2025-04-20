@@ -18,13 +18,17 @@ export const ViewMessage = ({ messages } : ViewMessageType) => {
                     switch (part.type) {
                       case 'text': {
                         return(
-                        <div
-                          className={`max-w-[80%] rounded-2xl p-4 flex ${message.role === "user" ? "justify-end" : "justify-start"} ${
-                          message.role === "user" ? "bg-purple-600 rounded-tr-none" : "bg-gray-800 rounded-tl-none"
-                        }`}
-                      >
-                        {part.text}
-                      </div>
+                          <div
+                            className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+                          >
+                          <div
+                            className={`max-w-[80%] rounded-2xl p-4 flex ${
+                            message.role === "user" ? "bg-purple-600 rounded-tr-none" : "bg-gray-800 rounded-tl-none"
+                          }`}
+                        >
+                          {part.text}
+                        </div>
+                          </div>
                       )
                     }
                     case 'tool-invocation':
