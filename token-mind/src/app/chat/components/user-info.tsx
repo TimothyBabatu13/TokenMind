@@ -58,18 +58,3 @@ useEffect(()=>{
   )
 }
 export default UserInfo
-
-export const UserBalance = () => {
-  const userContext = useUser();
-  const [userBalance, setUserBalance] = useState<null | string>(null);
-  const getUserBalance = () => {
-    if(userHasWallet(userContext)){
-      if(userContext.solana){
-        const { publicKey } = userContext.solana.wallet;
-      }
-    }
-  }
-  return(
-    <div></div>
-  )
-}

@@ -4,7 +4,7 @@ import { userHasWallet } from "@civic/auth-web3";
 import { useUser } from "@civic/auth-web3/react";
 import { useState } from "react";
 
-const useGetUsersBalance = () => {
+export const useGetUsersBalance = () => {
      const userContext = useUser();
       const [userBalance, setUserBalance] = useState<undefined | string>(undefined);
       const getUserBalance = () => {
