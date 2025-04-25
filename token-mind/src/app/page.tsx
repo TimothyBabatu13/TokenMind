@@ -5,14 +5,14 @@ import { StepCard } from "@/components/step-card"
 import FooterYear from "@/components/footer-date"
 import { GetStartedButton } from "@/components/client-buttons"
 import Logo from "@/components/Logo"
-// import { RedirectToChat } from "@/components/server-page"
+import { RedirectToChat } from "@/components/server-page"
 
 
 export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
-      {/* <RedirectToChat /> */}
+      <RedirectToChat />
       <header className="container mx-auto py-6 px-4 flex justify-between items-center">
         {/* <Link href={'/chat'}>Chat</Link> */}
         <div className="flex items-center gap-2">

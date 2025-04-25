@@ -14,18 +14,13 @@ import { ScrollToDown } from "./scroll-to-bottom"
 import { useChat } from "@ai-sdk/react"
 
  const ChatPage = () => {
-    // const chatProvider = useChatProvider();
+
+    const USER_WALLET_ADDRESS = ''
+    
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
-    // const [thinking, setIsThinking] = useState<boolean>(false)
-    const { messages, handleSubmit, handleInputChange, input } = useChat()
-    // const [messages, setMessages] = useState([
-    //     {
-    //         role: "assistant",
-    //         content:
-    //             "Hi there! I'm your TokenAI assistant. How can I help you today? You can ask me about trending tokens, search for specific tokens, check news, or swap tokens.",
-    //     },
-    // ])
-    // const [inputValue, setInputValue] = useState<string>("")
+   
+    const { messages, handleSubmit, handleInputChange, input } = useChat({api: `/api/chat?walletAddress=${USER_WALLET_ADDRESS}`})
+    
     const isDesktop = useMediaQuery("(min-width: 1024px)")
 
     useEffect(() => {
@@ -34,75 +29,34 @@ import { useChat } from "@ai-sdk/react"
         }
     }, [isDesktop])
 
+    console.log(messages)
     
-    // useEffect(()=>{
-    //     if(chatProvider?.text.length){
-    //         SendMessage(chatProvider.text)
-    //         chatProvider.setText('');
-    //     }
-    // }, [chatProvider])
-
-    // const SendMessage = (inputValue: string) => {
-    //     // Add user message
-    //     setMessages([...messages, { role: "user", content: inputValue }])
-    //     setIsThinking(true);
-    //     // Simulate AI response
-    //     setTimeout(() => {
-    //         let response
-    //         const lowercaseInput = inputValue.toLowerCase()
-
-    //         if (lowercaseInput.includes("trending") || lowercaseInput.includes("popular")) {
-    //             response =
-    //                 "Here are the trending tokens right now:\n\n1. ETH: $3,245 (+5.2%)\n2. SOL: $142 (+8.7%)\n3. AVAX: $38.5 (+3.1%)\n4. ARB: $1.85 (+12.3%)\n5. MATIC: $0.78 (+2.5%)"
-    //         } else if (lowercaseInput.includes("search") || lowercaseInput.includes("find")) {
-    //             response = "What token would you like me to search for? Please provide the token name or symbol."
-    //         } else if (
-    //             lowercaseInput.includes("news") ||
-    //             lowercaseInput.includes("twitter") ||
-    //             lowercaseInput.includes("x")
-    //         ) {
-    //             response =
-    //                 "Latest trending news from X:\n\n• Ethereum Layer 2 solutions seeing record adoption this week\n• New DEX launching with zero-fee trading for first month\n• Major update coming to Solana ecosystem next week"
-    //         } else if (lowercaseInput.includes("swap") || lowercaseInput.includes("exchange")) {
-    //             response =
-    //                 "I can help you swap tokens. Please specify which tokens you'd like to swap (e.g., 'Swap 0.5 ETH to USDT')."
-    //         } else {
-    //             response =
-    //                 "I'm here to help with crypto tokens! You can ask me to:\n• Show trending tokens\n• Search for a specific token\n• Check trending news on X\n• Swap between tokens"
-    //         }
-    //         setIsThinking(false)
-    //         setMessages((prev) => [...prev, { role: "assistant", content: response }])
-    //     }, 1000)
-
-    // }
-    // const handleSendMessage = (e : FormEvent) => {
-    //     e.preventDefault()
-    //     if (!inputValue.trim()) return
-
-    //     // Add user message
-    //     SendMessage(inputValue);
-    //     setInputValue("")
-    // }
 
     const toggleSidebar = () => {
         setSidebarOpen(prev => !prev)
     }
 
+    const handleCloseSideBar = () => {
+        if(!sidebarOpen) return
+        setSidebarOpen(false)
+    }
     return (
-        <div className="min-h-screen max-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex">
+        <div className="h-screen max-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex"
+            onClick={handleCloseSideBar}
+        >
 
             <SideBar 
                 sidebarOpen={sidebarOpen} 
                 toggleSidebar={toggleSidebar}
             />
 
-            <div className="flex-1 flex flex-col max-h-[100vh] overflow-y-hidden">
+            <div className="flex-1 flex flex-col  overflow-y-hidden">
                 <ChatHeader 
                     toggleSidebar={toggleSidebar}
                 />
 
-                <ScrollArea className="flex-1 p-4 overflow-y-scroll scroll-area">
-                    <div className="max-w-3xl mx-auto space-y-6">
+                <ScrollArea className="flex-1 p-4 h-screen overflow-y-scroll scroll-area">
+                    <div className="max-w-3xl mx-auto ">
                         <ViewMessage messages={messages}/>
                         {
                             // <ThinkingView />

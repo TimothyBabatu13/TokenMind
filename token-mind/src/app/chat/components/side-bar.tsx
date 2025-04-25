@@ -12,10 +12,9 @@ export const SideBar = ({ sidebarOpen, toggleSidebar } : {
     sidebarOpen: boolean,
     toggleSidebar: ()=>void,
 }) => {
-  
-  
-    
+   
     const userContext = useUser();
+    
     const handleLogOut = async () => {
       userContext.signOut();
     }
@@ -44,6 +43,9 @@ export const SideBar = ({ sidebarOpen, toggleSidebar } : {
         className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-800 transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
+        onClick={(e)=>{
+          e.stopPropagation()
+        }}
       >
         <div className="flex flex-col h-full">
           {/* Sidebar Header */}

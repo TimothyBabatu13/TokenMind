@@ -14,7 +14,7 @@ type getLastMessageProps = Array<{
     role: 'user',
     content: string,
     parts: Array<object>
-  }>
+}>
 
 
 const getLastMessage = ( arr  : getLastMessageProps ) : string  => {
@@ -25,9 +25,11 @@ const getLastMessage = ( arr  : getLastMessageProps ) : string  => {
 
 export const POST = async (req: NextRequest) => {
 
-  const { messages } = await req.json()
+  const { messages } = await req.json();
+  
+  const usersWalletAddress = req.nextUrl.searchParams.get('walletAddress')
   const message = getLastMessage(messages);
-
+  const systemPrompt = `${systemPromot}. This current user wallet address is ${usersWalletAddress}`
   const agent = await chooseAgent(message);
 
 
@@ -36,7 +38,7 @@ export const POST = async (req: NextRequest) => {
     const result = streamText({
       model,
       prompt: message,
-      system: systemPromot,
+      system: systemPrompt,
     })
     result.toDataStream()
     return result.toDataStreamResponse();
@@ -47,7 +49,7 @@ export const POST = async (req: NextRequest) => {
     const result = streamText({
       model: model,
       toolChoice: "auto",
-      system: systemPromot,
+      system: systemPrompt,
       tools: {
         [agentName]: agent.tools,
       },

@@ -1,6 +1,7 @@
 import { tool } from "ai";
 import { z } from "zod";
 import { getTrendingTokens } from "./agent/trending-token/agent";
+import { getTokenInfo } from "./agent/get-token-info/agent";
 
 export const getTrendingTokensAgent = tool({
     description: '',
@@ -20,7 +21,8 @@ export const getTokenInfoAgent = tool({
         address: z.string().describe('This is the wallet address of the token details being looking for')
     }),
     execute: async ({ address }) => {
-        return address + 'Tell the user this feature is coming'
+        const res = await getTokenInfo()
+        return address + res;
     }
 })
 
@@ -45,3 +47,5 @@ export const swapTokenAgent = tool({
         return 'Tell the user that this feature is coming'
     }
 })
+
+//agent to create memecoin and add liquidity to it.

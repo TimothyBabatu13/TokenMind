@@ -19,7 +19,7 @@ export const ViewMessage = ({ messages } : ViewMessageType) => {
                       case 'text': {
                         return(
                           <div
-                            className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+                            className={`flex ${message.role === "user" ? "justify-end mb-2" : "justify-start mb-2"}`}
                           >
                           <div
                             className={`max-w-[80%] rounded-2xl p-4 flex ${
