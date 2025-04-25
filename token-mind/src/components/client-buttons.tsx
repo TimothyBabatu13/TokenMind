@@ -1,7 +1,6 @@
 'use client'
 import { useUser } from "@civic/auth-web3/react";
 import { Button } from "./ui/button";
-import { toast } from "sonner";
 
 export function GetStartedButton({ children, text } : {
     children?: React.ReactNode,

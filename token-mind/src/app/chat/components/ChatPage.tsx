@@ -12,7 +12,6 @@ import { ChatHeader } from "./chat-header"
 import { ViewMessage } from "./messages-components"
 import { ScrollToDown } from "./scroll-to-bottom"
 import { useChat } from "@ai-sdk/react"
-import { ThinkingCard } from "./thinking-card"
 
  const ChatPage = () => {
 
