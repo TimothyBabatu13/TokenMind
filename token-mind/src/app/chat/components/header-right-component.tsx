@@ -24,10 +24,12 @@ import { userHasWallet } from "@civic/auth-web3";
 import { Connection } from "@solana/web3.js";
 import { shortenWalletAddress } from "@/hooks/use-shorten-wallet";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 
 export const HeaderRightButton = () => {
 
+    const navigate = useRouter();
     const SOLANA_RPC = "https://api.devnet.solana.com"
     const userContext = useUser();
     const { user, signOut } = userContext;
@@ -35,6 +37,8 @@ export const HeaderRightButton = () => {
     const [walletAddress, setWalletAddress] = useState<string | undefined>(undefined);
     const handleLogOut = async () => {
       await signOut();
+      toast('Logout successful');
+      navigate.push('/')
     }
     
 

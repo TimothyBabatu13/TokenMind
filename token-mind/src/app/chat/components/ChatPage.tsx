@@ -30,7 +30,7 @@ import { ThinkingCard } from "./thinking-card"
         }
     }, [isDesktop])
 
-    console.log(messages)
+    // console.log(messages)
     
 
     const toggleSidebar = () => {

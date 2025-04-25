@@ -1,8 +1,9 @@
+import LoadingScreen from "@/components/loading-page"
 
 
 const Loading = () => {
   return (
-    <div>loading</div>
+    <LoadingScreen />
   )
 }
 
