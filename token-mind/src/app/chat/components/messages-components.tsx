@@ -8,7 +8,7 @@ type ViewMessageType = {
   messages: UIMessage[];
 };
 export const ViewMessage = ({ messages } : ViewMessageType) => {
-  console.log(messages, 'hey')
+
     return(
       <div>
         {messages.map(message => (
