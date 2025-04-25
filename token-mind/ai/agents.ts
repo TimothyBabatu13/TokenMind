@@ -4,7 +4,7 @@ import { getTrendingTokens } from "./agent/trending-token/agent";
 import { getTokenInfo } from "./agent/get-token-info/agent";
 
 export const getTrendingTokensAgent = tool({
-    description: '',
+    description: 'Fetches a list of currently trending tokens based on market activity, such as volume, price changes, and social mentions.',
     parameters: z.object({}),
     execute : async () =>{
         const result = await getTrendingTokens();
