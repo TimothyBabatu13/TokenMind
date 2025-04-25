@@ -16,13 +16,15 @@ const schema = z.object({
     agent: z.string()
 })
 export const chooseAgent = async (message: string) => {
-
+    console.log('gets here')
     const { object } = await generateObject({
         model: model,
         schema,
         prompt: message,
         system
     })
+
+    console.log(agents.find(agent => agent.name === object.agent))
 
     return agents.find(agent => agent.name === object.agent) ?? null;
 }

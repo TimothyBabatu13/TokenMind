@@ -2,11 +2,13 @@
 import { LoadingMessage } from "./thinking-components";
 import { UIMessage } from "ai";
 import { GetTrendingTokenUI } from "../invocation-ui/get-trending-token";
+import { ThinkingCard } from "./thinking-card";
 
 type ViewMessageType = {
   messages: UIMessage[];
 };
 export const ViewMessage = ({ messages } : ViewMessageType) => {
+  console.log(messages, 'hey')
     return(
       <div>
         {messages.map(message => (
@@ -36,31 +38,13 @@ export const ViewMessage = ({ messages } : ViewMessageType) => {
                       switch (part.toolInvocation.toolName){
                         case 'GET_TRENDING_TOKEN': {
                           switch (part.toolInvocation.state) {
+                            
                             case 'call': {
                               return (
                                 <div key={callId}>
                                   {part.toolInvocation.args.message}
                                   <div>
-                                    <button
-                                      // onClick={() =>
-                                      //   addToolResulT({
-                                      //     toolCallId: callId,
-                                      //     result: 'Yes, confirmed.',
-                                      //   })
-                                      // }
-                                    >
-                                      Yes
-                                    </button>
-                                    <button
-                                      // onClick={() =>
-                                      //   addToolResult({
-                                      //     toolCallId: callId,
-                                      //     result: 'No, denied',
-                                      //   })
-                                      // }
-                                    >
-                                      No
-                                    </button>
+                                    <ThinkingCard text="Trending Token Ai Agent thinking"/>                                    
                                   </div>
                                 </div>)
                                 
@@ -71,6 +55,7 @@ export const ViewMessage = ({ messages } : ViewMessageType) => {
                                     <div key={callId}>
                                       <GetTrendingTokenUI
                                         data={part.toolInvocation.result['result']['body']['tokens']}
+                                        prices={part.toolInvocation.result['result']['body']['prices']}
                                       />
                                       
                                       {/* {JSON.stringify(part.toolInvocation.result['result']['body']['tokens'])} */}

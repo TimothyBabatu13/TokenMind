@@ -54,7 +54,7 @@ export const POST = async (req: NextRequest) => {
         [agentName]: agent.tools,
       },
       prompt: message,
-      maxSteps: 4
+      maxSteps: 3
       })
   
       result.toDataStream()

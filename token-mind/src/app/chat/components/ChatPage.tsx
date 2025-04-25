@@ -12,6 +12,7 @@ import { ChatHeader } from "./chat-header"
 import { ViewMessage } from "./messages-components"
 import { ScrollToDown } from "./scroll-to-bottom"
 import { useChat } from "@ai-sdk/react"
+import { ThinkingCard } from "./thinking-card"
 
  const ChatPage = () => {
 
@@ -55,12 +56,9 @@ import { useChat } from "@ai-sdk/react"
                     toggleSidebar={toggleSidebar}
                 />
 
-                <ScrollArea className="flex-1 p-4 h-screen overflow-y-scroll scroll-area">
+                <ScrollArea className="flex-1 p-4 overflow-y-scroll max-h-[100%] scroll-area">
                     <div className="max-w-3xl mx-auto ">
                         <ViewMessage messages={messages}/>
-                        {
-                            // <ThinkingView />
-                        }
                         <ScrollToDown messages={messages}/>
                     </div>
                 </ScrollArea>
