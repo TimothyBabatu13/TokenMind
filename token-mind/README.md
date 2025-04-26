@@ -49,6 +49,18 @@ Clone the repo:
 git clone https://github.com/TimothyBabatu13/TokenMind.git
 cd token-mind
 npm install
-npm run dev
+```
 
-# https://youtu.be/Wx1GZiBNLlg
+Create .env.local file and add these environment variables
+```bash 
+CIVIC_AUTH_SECRET="***************"
+GEMINI_KEY="********"
+```
+
+Run the app
+```bash 
+
+npm run dev
+```
+
+Open your browser and click on load your app using [http://localhost:3000/](http://localhost:3000/)
