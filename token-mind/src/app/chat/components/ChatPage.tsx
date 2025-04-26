@@ -12,11 +12,13 @@ import { ChatHeader } from "./chat-header"
 import { ViewMessage } from "./messages-components"
 import { ScrollToDown } from "./scroll-to-bottom"
 import { useChat } from "@ai-sdk/react"
+import { UseGetWalletAddress } from "@/hooks/use-civic-wallet"
 
  const ChatPage = () => {
 
-    const USER_WALLET_ADDRESS = ''
-    
+    const wallet = UseGetWalletAddress();
+    const USER_WALLET_ADDRESS = typeof wallet == 'string' ? wallet : '';
+
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
    
     const { messages, handleSubmit, handleInputChange, input } = useChat({api: `/api/chat?walletAddress=${USER_WALLET_ADDRESS}`})
@@ -28,6 +30,8 @@ import { useChat } from "@ai-sdk/react"
             setSidebarOpen(false)
         }
     }, [isDesktop])
+
+    
 
     // console.log(messages)
     

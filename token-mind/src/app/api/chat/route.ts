@@ -2,11 +2,11 @@ import { streamText } from "ai"
 import { NextRequest } from "next/server";
 import { chooseAgent } from "./helper/helper";
 import { model } from "@/lib/model";
+import { agents } from "../../../../ai/agent/agent";
 
-const systemPromot = `You're a AI Crypto Assistant. Your name is TokenMind. These are the lists of things you can do 
-  1. Discover trending tokens 
-  2. Get real-time news
-  3. Swap tokens seamlessly.
+const systemPromot = `You are TokenMind agents that each have specialized tasks.
+Given this list of agents and their capabilities, choose the one that is most appropriate for the user's request.
+${agents.map(agent => `${agent.name}: ${agent.systemPrompt}`).join("\n")}
   
   If any of these does not fall into user's prompt, do well to answer the user without. Anything that falls outside of this, do not reply to it. Kindly reply the user that it is not part of what you are built for. Always make your response concise and avoid buzz words.
 `
@@ -54,7 +54,8 @@ export const POST = async (req: NextRequest) => {
         [agentName]: agent.tools,
       },
       prompt: message,
-      maxSteps: 3
+      maxSteps: 10,
+      maxRetries: 0
       })
   
       result.toDataStream()

@@ -2,6 +2,7 @@ import { tool } from "ai";
 import { z } from "zod";
 import { getTrendingTokens } from "./agent/trending-token/agent";
 import { getTokenInfo } from "./agent/get-token-info/agent";
+import { KnowledgeAgent } from "./knowledge/agent";
 
 export const getTrendingTokensAgent = tool({
     description: 'Fetches a list of currently trending tokens based on market activity, such as volume, price changes, and social mentions.',
@@ -15,13 +16,24 @@ export const getTrendingTokensAgent = tool({
     
 })
 
+export const getKnowledgeAgent = tool({
+    description: 'A knowledgeable assistant that provides information about about solana protocols, documentation, concepts and tools. Provide concise, accurate information with a well-structured response',
+    parameters: z.object({
+        info: z.string().describe('A short sentence or question asking for specific information about Solana blockchain protocols, developer tools, documentation, or key concepts.')
+    }),
+    execute: async ({ info }) => {
+        const res = await KnowledgeAgent(info)
+        return res;
+    }
+})
+
 export const getTokenInfoAgent = tool({
     description: 'This gets the details for any solana token provided address is given',
     parameters: z.object({
         address: z.string().describe('This is the wallet address of the token details being looking for')
     }),
     execute: async ({ address }) => {
-        const res = await getTokenInfo()
+        const res = await getTokenInfo({walletAddress: address})
         return address + res;
     }
 })

@@ -24,7 +24,7 @@ export const chooseAgent = async (message: string) => {
         system
     })
 
-    console.log(agents.find(agent => agent.name === object.agent))
+    console.log(agents.find(agent => agent.name === object.agent));
 
     return agents.find(agent => agent.name === object.agent) ?? null;
 }
