@@ -46,5 +46,7 @@ Users log in seamlessly without needing external wallets or extensions — their
 Clone the repo:
 
 ```bash
-git clone https://github.com/your-username/tokenmind.git
-cd tokenmind
+git clone https://github.com/TimothyBabatu13/TokenMind.git
+cd token-mind
+npm install
+npm run dev
