@@ -51,6 +51,7 @@ export const HeaderRightButton = () => {
       
             const conncetion = new Connection(SOLANA_RPC);
             if(publicKey){
+              console.log(publicKey);
               setWalletAddress(publicKey.toBase58());
               const balance = await conncetion.getBalance(publicKey)
               setWalletBalance(balance)
