@@ -50,3 +50,5 @@ git clone https://github.com/TimothyBabatu13/TokenMind.git
 cd token-mind
 npm install
 npm run dev
+
+# https://youtu.be/Wx1GZiBNLlg

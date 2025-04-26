@@ -5,4 +5,4 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const SOLANA_RPC ="https://api.devnet.solana.com";
+export const SOLANA_RPC ="https://api.mainnet.solana.com";
