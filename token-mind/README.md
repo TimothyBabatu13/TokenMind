@@ -37,7 +37,7 @@ Users log in seamlessly without needing external wallets or extensions — their
 - **Vercel AI SDK** (Streaming AI responses)
 - **Solana Web3.js** (Blockchain interactions)
 - **TailwindCSS** (UI Styling)
-- **Helius API** (Blockchain data & trends)
+<!-- - **Helius API** (Blockchain data & trends) -->
 
 ---
 
