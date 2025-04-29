@@ -28,13 +28,19 @@ export const getKnowledgeAgent = tool({
 })
 
 export const getTokenInfoAgent = tool({
-    description: 'This gets the details for any solana token provided address is given',
+    description: 'Fetches the details for any solana token provided address is given',
     parameters: z.object({
-        address: z.string().describe('This is the wallet address of the token details being looking for')
+        address: z.string().describe('This is the wallet address of the token details being fetched for. It always looks like this 61V8vBaqAGMpgDQi4JcAwo1dmBGHsyhzodcPqnEVpump')
     }),
     execute: async ({ address }) => {
+        if(!address){
+            return 'Please provide wallet address'
+        }
         const res = await getTokenInfo({walletAddress: address})
-        return address + res;
+        console.log(res)
+        return{
+            res
+        }
     }
 })
 

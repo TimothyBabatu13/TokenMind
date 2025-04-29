@@ -19,7 +19,7 @@ export const agents  = [
     {
         name: 'GET_TOKEN_INFO',
         slug: '',
-        systemPrompt: '',
+        systemPrompt: 'You are a crypto data assistant. Your job is to fetch and return a token asked by user. Do not generate or guess data — return only what is fetched from reliable',
         capabilities: '',
         tools: getTokenInfoAgent
     },

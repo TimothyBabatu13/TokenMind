@@ -3,6 +3,7 @@ import { LoadingMessage } from "./thinking-components";
 import { UIMessage } from "ai";
 import { GetTrendingTokenUI } from "../invocation-ui/get-trending-token";
 import { ThinkingCard } from "./thinking-card";
+import TokenCard from "../invocation-ui/get-token-info";
 import KnowledgeMarkdown from "../invocation-ui/knowledge-markdown";
 
 type ViewMessageType = {
@@ -22,6 +23,7 @@ export const ViewMessage = ({ messages } : ViewMessageType) => {
                       case 'text': {
                         return(
                           <div
+                            key={crypto.randomUUID()}
                             className={`flex ${message.role === "user" ? "justify-end mb-2" : "justify-start mb-2"}`}
                           >
                           <div
@@ -29,7 +31,7 @@ export const ViewMessage = ({ messages } : ViewMessageType) => {
                             message.role === "user" ? "bg-purple-600 rounded-tr-none" : "bg-gray-800 rounded-tl-none"
                           }`}
                         >
-                          {part.text}
+                          <KnowledgeMarkdown msg={part.text} />
                         </div>
                           </div>
                       )
@@ -67,20 +69,32 @@ export const ViewMessage = ({ messages } : ViewMessageType) => {
                           break
                         }
 
-                        case 'KNOWLEDGE' : {
-                          return (
-                            <div>
-                              <KnowledgeMarkdown msg={`
-I couldn't find a token specifically named "Trump" on Solana. It's possible this token exists on a different blockchain or isn't widely recognized.
+                        case 'GET_TOKEN_INFO' : {
+                          switch (part.toolInvocation.state) {
+                            case 'call': {
+                              return (
+                                <div key={callId}>
+                                  {part.toolInvocation.args.message}
+                                  <div>
+                                    <ThinkingCard text="Token Info Ai Agent thinking"/>                                    
+                                  </div>
+                                </div>)
+                            }
 
-You can explore popular Solana token lists on sites like [CoinGecko](https://www.coingecko.com/en/coins/solana) or [Raydium](https://raydium.io/swap/).
-
-For more general information about Solana tokens, the [Solana Cookbook](https://solanacookbook.com/references/token-program.html) offers a good starting point.
-
-If you're looking for newly launched or trending tokens, check [Discord](https://discord.com/) or [Telegram](https://telegram.org/).
-`}/>
-                            </div>
-                          )
+                            case 'result' : {
+                              return (
+                                <div 
+                                  key={callId}
+                                >
+                                  <TokenCard 
+                                    data={part.toolInvocation.result['res']['body']['res']}
+                                  />
+                                </div>
+                              )
+                            }
+                          }
+                          break;
+                          
                         }
         
                       }

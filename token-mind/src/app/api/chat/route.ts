@@ -9,6 +9,7 @@ Given this list of agents and their capabilities, choose the one that is most ap
 ${agents.map(agent => `${agent.name}: ${agent.systemPrompt}`).join("\n")}
   
   If any of these does not fall into user's prompt, do well to answer the user without. Anything that falls outside of this, do not reply to it. Kindly reply the user that it is not part of what you are built for. Always make your response concise and avoid buzz words.
+  Unless explicitly stated, you should not reiterate the output of the tool as it is shown in the user interface
 `
 type getLastMessageProps = Array<{
     role: 'user',
