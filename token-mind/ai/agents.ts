@@ -23,7 +23,7 @@ export const getKnowledgeAgent = tool({
     }),
     execute: async ({ info }) => {
         const res = await KnowledgeAgent(info)
-        return res;
+        return {res, invo: 'knowledge'};
     }
 })
 
@@ -59,5 +59,6 @@ export const swapTokenAgent = tool({
         return 'Tell the user that this feature is coming'
     }
 })
+
 
 //agent to create memecoin and add liquidity to it.

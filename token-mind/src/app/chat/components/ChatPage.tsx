@@ -48,7 +48,6 @@ import { UseGetWalletAddress } from "@/hooks/use-civic-wallet"
         <div className="h-screen max-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex"
             onClick={handleCloseSideBar}
         >
-
             <SideBar 
                 sidebarOpen={sidebarOpen} 
                 toggleSidebar={toggleSidebar}

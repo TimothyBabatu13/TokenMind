@@ -45,7 +45,7 @@ export const POST = async (req: NextRequest) => {
   }
   else {
     const agentName = agent.name
-
+    console.log(agentName)
     const result = streamText({
       model: model,
       toolChoice: "auto",

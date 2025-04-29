@@ -3,12 +3,13 @@ import { LoadingMessage } from "./thinking-components";
 import { UIMessage } from "ai";
 import { GetTrendingTokenUI } from "../invocation-ui/get-trending-token";
 import { ThinkingCard } from "./thinking-card";
+import KnowledgeMarkdown from "../invocation-ui/knowledge-markdown";
 
 type ViewMessageType = {
   messages: UIMessage[];
 };
 export const ViewMessage = ({ messages } : ViewMessageType) => {
-
+    console.log(messages)
     return(
       <div>
         {messages.map(message => (
@@ -65,8 +66,25 @@ export const ViewMessage = ({ messages } : ViewMessageType) => {
                           }
                           break
                         }
+
+                        case 'KNOWLEDGE' : {
+                          return (
+                            <div>
+                              <KnowledgeMarkdown msg={`
+I couldn't find a token specifically named "Trump" on Solana. It's possible this token exists on a different blockchain or isn't widely recognized.
+
+You can explore popular Solana token lists on sites like [CoinGecko](https://www.coingecko.com/en/coins/solana) or [Raydium](https://raydium.io/swap/).
+
+For more general information about Solana tokens, the [Solana Cookbook](https://solanacookbook.com/references/token-program.html) offers a good starting point.
+
+If you're looking for newly launched or trending tokens, check [Discord](https://discord.com/) or [Telegram](https://telegram.org/).
+`}/>
+                            </div>
+                          )
+                        }
         
                       }
+                    
                    }
                   })}
                 </div>
