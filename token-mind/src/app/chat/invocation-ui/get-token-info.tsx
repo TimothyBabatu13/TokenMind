@@ -43,42 +43,11 @@ export default function TokenCard({ data } : {
     const info = data;
 
 
-//   const tokenData = {
-//     mint: "61V8vBaqAGMpgDQi4JcAwo1dmBGHsyhzodcPqnEVpump",
-//     standard: "metaplex",
-//     name: "AI Rig Complex",
-//     symbol: "arc",
-//     logo: "https://logo.moralis.io/solana-mainnet_61V8vBaqAGMpgDQi4JcAwo1dmBGHsyhzodcPqnEVpump_6d49c42df8d2efd6.webp",
-//     decimals: "6",
-//     metaplex: {
-//       metadataUri: "https://ipfs.io/ipfs/QmZf8F4hXkAma1fUY8ZLhbxtpdi1anGAof5FqVAjrKrYhh",
-//       masterEdition: false,
-//       isMutable: false,
-//       sellerFeeBasisPoints: 0,
-//       updateAuthority: "TSLvdd1pWpHVjahSpsvCXUbgwsL3JAcvokwaKt1eokM",
-//       primarySaleHappened: 0,
-//     },
-//     fullyDilutedValue: "65848198.39",
-//     totalSupply: "999994083317010",
-//     totalSupplyFormatted: "999994083.31701",
-//     links: {
-//       reddit: "https://www.reddit.com",
-//       telegram: "https://t.me/+CI-vivonuApiZWQ0",
-//       twitter: "https://twitter.com/arcdotfun",
-//       website: "https://www.arc.fun/",
-//       moralis: "https://moralis.com/chain/solana/token/price/61V8vBaqAGMpgDQi4JcAwo1dmBGHsyhzodcPqnEVpump",
-//     },
-//     description: null,
-//     isVerifiedContract: true,
-//   }
-
   const formatNumber = (num: string) => {
     return Number.parseFloat(num).toLocaleString("en-US", {
       maximumFractionDigits: 2,
     })
   }
-
-  const linkHref = ``;
   
 
   return (
