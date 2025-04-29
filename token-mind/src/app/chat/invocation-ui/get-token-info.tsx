@@ -152,7 +152,7 @@ export default function TokenCard({ data } : {
         </div>
         <Link href={info.links.moralis || ''} target="_blank" rel="noopener noreferrer">
           <Button variant="default" size="sm">
-            <a href="">
+            <a href={`https://solscan.io/token/${info.mint}`}>
                 View on Solscan
             </a>
           </Button>
