@@ -36,29 +36,35 @@ export const HeaderRightButton = () => {
     const { user, signOut } = userContext;
     const [walletBalance, setWalletBalance] = useState<undefined | number>(undefined);
     const [walletAddress, setWalletAddress] = useState<string | undefined>(undefined);
+    
     const handleLogOut = async () => {
       await signOut();
       toast('Logout successful');
       navigate.push('/')
     }
     
-
-    useEffect(()=>{
-      const getUserBalance = async () => {
+    const getUserBalance = async () => {
+      try {
         if(userHasWallet(userContext)){
           if(userContext.solana){
             const { publicKey } = userContext.solana.wallet;
-      
+            
             const conncetion = new Connection(SOLANA_RPC);
+            
             if(publicKey){
               setWalletAddress(publicKey.toBase58());
               const balance = await conncetion.getBalance(publicKey)
               setWalletBalance(balance)
             }
           }
+        }  
+        } 
+        catch (error) {
+          console.log(error) 
         }
       }
 
+    useEffect(()=>{
       getUserBalance();
 
     }, [user])

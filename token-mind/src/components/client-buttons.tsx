@@ -18,7 +18,7 @@ export function GetStartedButton({ children, text } : {
   
   return (
     <Button 
-        className="cursor-pointer bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"
+        className="cursor-pointer "
         onClick={handleSignIn}
     >
         {text}

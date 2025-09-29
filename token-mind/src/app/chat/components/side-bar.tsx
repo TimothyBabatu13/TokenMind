@@ -7,10 +7,14 @@ import UserInfo from "./user-info"
 import { useUser } from "@civic/auth-web3/react"
 import { userHasWallet } from "@civic/auth-web3"
 import { useEffect } from "react"
+import { ChatRequestOptions, CreateMessage, Message } from "ai"
 
-export const SideBar = ({ sidebarOpen, toggleSidebar } : {
+export type append = (message: Message | CreateMessage, chatRequestOptions?: ChatRequestOptions) => Promise<string | null | undefined>
+
+export const SideBar = ({ sidebarOpen, toggleSidebar, append } : {
     sidebarOpen: boolean,
     toggleSidebar: ()=>void,
+    append: append
 }) => {
    
     const userContext = useUser();
@@ -40,7 +44,7 @@ export const SideBar = ({ sidebarOpen, toggleSidebar } : {
     
     return(
     <div
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-800 transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-[black] transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         onClick={(e)=>{
@@ -51,7 +55,7 @@ export const SideBar = ({ sidebarOpen, toggleSidebar } : {
           {/* Sidebar Header */}
           <div className="p-4 border-b border-gray-700 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full bg-gradient-to-r from-purple-600 to-blue-500 flex items-center justify-center">
+              <div className="h-8 w-8 rounded-full bg-gradient-to-r  flex items-center justify-center">
                 <Logo />
                 {/* <span className="font-bold text-sm">A</span> */}
               </div>
@@ -77,28 +81,32 @@ export const SideBar = ({ sidebarOpen, toggleSidebar } : {
             <TabsContent value="features" className="flex-1 p-4 space-y-2">
               <SidebarButton 
                 toggleSidebar={toggleSidebar}
-                icon={<TrendingUp className="h-5 w-5" />} 
+                icon={<TrendingUp className="h-5 w-5 text-white" />} 
                 text="Trending Tokens" 
                 propmt="What are the trending tokens?"
+                append={append}
               />
               <SidebarButton 
-                icon={<Search className="h-5 w-5" />} 
+                icon={<Search className="h-5 w-5 text-white" />} 
                 text="Search Tokens"
                 toggleSidebar={toggleSidebar} 
                 propmt="I want to search about a token"
+                append={append}
                 />
               <SidebarButton 
                 icon={<BarChart3 
-                className="h-5 w-5" />} 
+                className="h-5 w-5 text-white" />} 
                 text="X Trending News" 
                 toggleSidebar={toggleSidebar}
                 propmt="Tell me what is trending on X"
+                append={append}
                 />
               <SidebarButton 
-                icon={<Repeat className="h-5 w-5" />} 
+                icon={<Repeat className="h-5 w-5 text-white" />} 
                 text="Token Swap" 
                 toggleSidebar={toggleSidebar}
                 propmt="I want to swap token"
+                append={append}
                 />
             </TabsContent>
 

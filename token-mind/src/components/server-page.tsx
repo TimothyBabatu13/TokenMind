@@ -17,6 +17,6 @@ export const RedirectToChat = async () => {
         redirect('/chat');
     }
     return(
-        <div></div>
+        <div />
     )
 }

@@ -5,31 +5,31 @@ import { StepCard } from "@/components/step-card"
 import FooterYear from "@/components/footer-date"
 import { GetStartedButton } from "@/components/client-buttons"
 import Logo from "@/components/Logo"
-import { RedirectToChat } from "@/components/server-page"
+// import { RedirectToChat } from "@/components/server-page"
 
 
 export default function LandingPage() {
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
-      <RedirectToChat />
+    <div className="min-h-screen text-black bg-[#80808012]">
+      {/* <RedirectToChat /> */}
       <header className="container mx-auto py-6 px-4 flex justify-between items-center">
         {/* <Link href={'/chat'}>Chat</Link> */}
         <div className="flex items-center gap-2">
-          <div className="h-10 w-10 rounded-full bg-gradient-to-r from-purple-600 to-blue-500 flex items-center justify-center">
+          <div className="h-10 w-10 rounded-full flex items-center justify-center">
             <Logo />
             {/* <span className="font-bold text-xl">A</span> */}
           </div>
           <span className="font-bold text-xl">TokenMind</span>
         </div>
         <div className="hidden md:flex items-center gap-6">
-          <Link href="#features" className="hover:text-purple-400 transition">
+          <Link href="#features" className="hover:text-black transition">
             Features
           </Link>
-          <Link href="#how-it-works" className="hover:text-purple-400 transition">
+          <Link href="#how-it-works" className="hover:text-black transition">
             How it works
           </Link>
-          <Link href="#faq" className="hover:text-purple-400 transition">
+          <Link href="#faq" className="hover:text-black transition">
             FAQ
           </Link>
         </div>
@@ -38,10 +38,10 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20 flex flex-col items-center text-center">
-        <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-blue-400 to-purple-400">
+        <h1 className="text-4xl md:text-6xl font-bold mb-6 ">
           Your AI Crypto Assistant
         </h1>
-        <p className="text-xl text-gray-300 max-w-2xl mb-10">
+        <p className="text-xl max-w-2xl mb-10">
           Discover trending tokens, get real-time news, and swap tokens seamlessly with our intelligent AI agent.
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
@@ -54,26 +54,26 @@ export default function LandingPage() {
       {/* Features Section */}
       <section id="features" className="container mx-auto px-4 py-20">
         <h2 className="text-3xl md:text-4xl font-bold mb-16 text-center">
-          Powerful <span className="text-purple-400">Features</span>
+          Powerful <span className="">Features</span>
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <FeatureCard
-            icon={<TrendingUp className="h-10 w-10 text-purple-400" />}
+            icon={<TrendingUp className="h-10 w-10 " />}
             title="Trending Tokens"
             description="Discover the hottest tokens in the market with real-time trending data."
           />
           <FeatureCard
-            icon={<Search className="h-10 w-10 text-blue-400" />}
+            icon={<Search className="h-10 w-10 " />}
             title="Token Search"
             description="Find detailed information about any token with our powerful search."
           />
           <FeatureCard
-            icon={<BarChart3 className="h-10 w-10 text-purple-400" />}
+            icon={<BarChart3 className="h-10 w-10 " />}
             title="X Trending News"
             description="Stay updated with the latest crypto news trending on X (Twitter)."
           />
           <FeatureCard
-            icon={<Repeat className="h-10 w-10 text-blue-400" />}
+            icon={<Repeat className="h-10 w-10 " />}
             title="Token Swaps"
             description="Swap between tokens seamlessly with our integrated exchange."
           />
@@ -83,7 +83,7 @@ export default function LandingPage() {
       {/* How it Works */}
       <section id="how-it-works" className="container mx-auto px-4 py-20">
         <h2 className="text-3xl md:text-4xl font-bold mb-16 text-center">
-          How It <span className="text-purple-400">Works</span>
+          How It <span className="">Works</span>
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <StepCard number="01" title="Sign Up" description="Create your account in seconds and connect your wallet." />
@@ -98,7 +98,7 @@ export default function LandingPage() {
 
       {/* CTA Section */}
       <section className="container mx-auto px-4 py-20">
-        <div className="bg-gradient-to-r from-purple-900/50 to-blue-900/50 rounded-3xl p-10 text-center">
+        <div className=" bg-black rounded-3xl p-10 text-center text-white">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to revolutionize your crypto experience?</h2>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-10">
             Join thousands of traders using our AI assistant to make smarter decisions.

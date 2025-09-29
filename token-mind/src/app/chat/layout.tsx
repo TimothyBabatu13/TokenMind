@@ -1,4 +1,3 @@
-import ChatContext from "@/context/chat-context";
 
 export default function Layout({
   children,
@@ -6,9 +5,8 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <ChatContext>
-        {children}
-    </ChatContext>  
-    
+    <div>
+      {children}
+    </div>  
   );
 }

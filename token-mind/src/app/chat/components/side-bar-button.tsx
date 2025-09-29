@@ -1,19 +1,19 @@
 import { Button } from "@/components/ui/button";
-import { useChat } from "@ai-sdk/react";
+import { type append } from "./side-bar";
 
-export function SidebarButton({ icon, text, propmt, toggleSidebar } : {
+export function SidebarButton({ icon, text, propmt, toggleSidebar, append } : {
     icon: React.ReactNode,
     text: string,
     propmt: string,
-    toggleSidebar: ()=>void
+    toggleSidebar: ()=>void,
+    append: append
 }) {
-
-    const { append } = useChat();
     
     const handleSendMessage = () => {
         toggleSidebar()
-        append({content: propmt, role: 'user'})
+        append({content: propmt, role: 'user'});
     }
+
     return (
       <Button 
             variant="ghost" 
