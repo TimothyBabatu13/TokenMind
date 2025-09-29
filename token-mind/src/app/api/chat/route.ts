@@ -38,10 +38,9 @@ export const POST = async (req: NextRequest) => {
   const conversationHistory = getLastTenMessages(messages)
   const systemPrompt = `${systemPromot}. This current user wallet address is ${usersWalletAddress}`
 
-  console.log(systemPrompt)
   const agent = await chooseAgent(message);
 
-
+console.log(agent)
   if(!agent) {
 
     const result = streamText({

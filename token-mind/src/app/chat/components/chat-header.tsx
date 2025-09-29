@@ -16,7 +16,7 @@ export const ChatHeader = ({ toggleSidebar } : ChatHeaderProps) => {
                 >
                     <Menu className="h-5 w-5" />
                 </Button>
-                <h1 className="text-xl font-bold">TokenMind Chat</h1>
+                <h1 className="text-xl font-bold hidden sm:block">TokenMind Chat</h1>
            </div>
 
             <HeaderRightButton />
