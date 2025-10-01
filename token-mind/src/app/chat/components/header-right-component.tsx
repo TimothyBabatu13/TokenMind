@@ -20,18 +20,18 @@ import { useUser } from "@civic/auth-web3/react";
 import { Wallet } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { userHasWallet } from "@civic/auth-web3";
 import { Connection } from "@solana/web3.js";
 import { shortenWalletAddress } from "@/hooks/use-shorten-wallet";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { SOLANA_RPC } from "@/lib/utils";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 
 export const HeaderRightButton = () => {
 
     const navigate = useRouter();
-    
+    const { publicKey } = useWallet()
     const userContext = useUser();
     const { user, signOut } = userContext;
     const [walletBalance, setWalletBalance] = useState<undefined | number>(undefined);
@@ -45,20 +45,14 @@ export const HeaderRightButton = () => {
     
     const getUserBalance = async () => {
       try {
-        if(userHasWallet(userContext)){
-          if(userContext.solana){
-            const { publicKey } = userContext.solana.wallet;
-            
-            const conncetion = new Connection(SOLANA_RPC);
-            
-            if(publicKey){
-              setWalletAddress(publicKey.toBase58());
-              const balance = await conncetion.getBalance(publicKey)
-              setWalletBalance(balance)
-            }
-          }
-        }  
-        } 
+        
+        const conncetion = new Connection(SOLANA_RPC);
+        if(publicKey){
+          setWalletAddress(publicKey.toBase58());
+          const balance = await conncetion.getBalance(publicKey)
+          setWalletBalance(balance)
+        }
+      } 
         catch (error) {
           console.log(error) 
         }

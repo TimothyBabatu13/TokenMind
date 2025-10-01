@@ -31,7 +31,7 @@ const getLastTenMessages = (arr: MessageProps ) : MessageProps => {
 export const POST = async (req: NextRequest) => {
 
   const { messages } = await req.json();
-  
+
   const usersWalletAddress = req.nextUrl.searchParams.get('walletAddress')
 
   const message = getLastMessage(messages);
@@ -39,6 +39,7 @@ export const POST = async (req: NextRequest) => {
   const systemPrompt = `${systemPromot}. This current user wallet address is ${usersWalletAddress}`
 
   try {
+    
     const agent = await chooseAgent(message);
     
     if(!agent) {

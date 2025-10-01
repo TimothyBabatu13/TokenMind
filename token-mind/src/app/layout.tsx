@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AuthSession from "@/context/AuthSession";
 import { Toaster } from "@/components/ui/sonner"
+import WalletAdapter from "@/context/wallet-adapter";
 
 
 
@@ -53,10 +54,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AuthSession>
-          {children}
-          <Toaster />
-        </AuthSession>
+        <WalletAdapter>
+          <AuthSession>
+            {children}
+            <Toaster />
+          </AuthSession>
+        </WalletAdapter>
       </body>
     </html>
   );
