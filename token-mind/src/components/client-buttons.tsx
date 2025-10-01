@@ -1,22 +1,23 @@
 'use client'
-import { useUser } from "@civic/auth-web3/react";
 import { Button } from "./ui/button";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 export function GetStartedButton({ children, text } : {
     children?: React.ReactNode,
     text: string
 }) {
-  const { signIn } = useUser();
 
   const handleSignIn = async () => {
     try {
-      await signIn();
+      
     } catch (error) {
       console.log('error:',error)
     }
   }
   
   return (
+    <div>
+
     <Button 
         className="cursor-pointer "
         onClick={handleSignIn}
@@ -24,5 +25,7 @@ export function GetStartedButton({ children, text } : {
         {text}
         {children}
     </Button>
+    <WalletMultiButton/>
+    </div>
   );
 };

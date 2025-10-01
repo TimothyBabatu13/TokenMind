@@ -6,4 +6,4 @@ const google = createGoogleGenerativeAI({
   apiKey: apiKey,
 });
 
-export const model = google('gemini-1.5-pro-latest')
+export const model = google('gemini-2.5-flash')

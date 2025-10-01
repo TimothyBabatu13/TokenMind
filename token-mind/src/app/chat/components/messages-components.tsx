@@ -168,7 +168,9 @@ const ErrorMessageFormat = ({ errorMessage } : {
     case `"Failed after 3 attempts. Last error: Cannot connect to API: getaddrinfo ENOTFOUND generativelanguage.googleapis.com"`:
       msg =  "Internet Connectivity error. Check your internet"
       break;
-  
+    case '"Failed after 3 attempts. Last error: Cannot connect to API: Connect Timeout Error (attempted addresses: 216.58.214.170:443, 142.250.74.234:443, 216.58.213.74:443, 172.217.20.202:443, 172.217.18.202:443, 142.250.178.138:443, 142.250.75.234:443, 216.58.214.74:443, 216.58.215.42:443, 142.250.179.106:443, 142.250.201.170:443, 142.250.179.74:443, 172.217.20.170:443, timeout: 10000ms)"':
+      msg= "There is an error with the api"
+      break;
     default:
       msg = "Nothing is here"
       break;
