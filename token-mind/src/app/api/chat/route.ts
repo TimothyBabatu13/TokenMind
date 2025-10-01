@@ -1,5 +1,5 @@
 import { streamText } from "ai"
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { chooseAgent } from "./helper/helper";
 import { model } from "@/lib/model";
 import { agents } from "../../../../ai/agent/agent";
@@ -38,35 +38,51 @@ export const POST = async (req: NextRequest) => {
   const conversationHistory = getLastTenMessages(messages)
   const systemPrompt = `${systemPromot}. This current user wallet address is ${usersWalletAddress}`
 
-  const agent = await chooseAgent(message);
-
-console.log(agent)
-  if(!agent) {
-
-    const result = streamText({
-      model,
-      messages: conversationHistory,
-      system: systemPrompt,
-    })
-    result.toDataStream()
-    return result.toDataStreamResponse();
-  }
-  else {
-    const agentName = agent.name
-    console.log(agentName)
-    const result = streamText({
-      model: model,
-      toolChoice: "auto",
-      system: systemPrompt,
-      tools: {
-        [agentName]: agent.tools,
-      },
-      messages: conversationHistory,
-      maxSteps: 10,
-      maxRetries: 0
+  try {
+    const agent = await chooseAgent(message);
+    
+    if(!agent) {
+      const result = streamText({
+        model,
+        messages: conversationHistory,
+        system: systemPrompt,
       })
-  
       result.toDataStream()
       return result.toDataStreamResponse();
+    }
+    else {
+      const agentName = agent.name
+      
+      console.log(agentName)
+      const result = streamText({
+        model: model,
+        toolChoice: "auto",
+        system: systemPrompt,
+        tools: {
+          [agentName]: agent.tools,
+        },
+        messages: conversationHistory,
+        maxSteps: 10,
+        maxRetries: 0
+      })
+      
+      result.toDataStream()
+      return result.toDataStreamResponse();
+    }  
+  } catch (error) {
+    const err = error as Error;
+    console.log('Error here')
+    console.log(error) 
+    console.log(`Error message, ${err.message}`) 
+    console.log(`Error cause, ${err.cause}`)
+    console.log(`Error name, ${err.name}`)
+    
+    
+      console.log('yoo, there is an error here')
+      return NextResponse.json(err.message,{
+        status: 500
+      })
+    
   }
+  
 }

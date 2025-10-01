@@ -22,9 +22,8 @@ import { UseGetWalletAddress } from "@/hooks/use-civic-wallet"
     
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
    
-    const { messages, handleSubmit, handleInputChange, input, isLoading, append } = useChat({api: `/api/chat?walletAddress=${USER_WALLET_ADDRESS}`})
+    const { messages, handleSubmit, handleInputChange, input, isLoading, append, error, reload } = useChat({api: `/api/chat?walletAddress=${USER_WALLET_ADDRESS}`})
     const isDesktop = useMediaQuery("(min-width: 1024px)")
-
 
     useEffect(() => {
         if (isDesktop) {
@@ -45,7 +44,7 @@ import { UseGetWalletAddress } from "@/hooks/use-civic-wallet"
 
     return (
 
-            <div className="h-screen max-h-screen bg-black text-white flex"
+            <div className="h-screen  bg-black text-white flex"
                 onClick={handleCloseSideBar}
             >
                 <SideBar 
@@ -61,7 +60,12 @@ import { UseGetWalletAddress } from "@/hooks/use-civic-wallet"
 
                     <ScrollArea className="flex-1 p-4 overflow-y-scroll max-h-[100%] scroll-area">
                         <div className="max-w-3xl mx-auto ">
-                            <ViewMessage messages={messages}/>
+                            <ViewMessage 
+                                messages={messages} 
+                                error={error} 
+                                reload={reload}
+                                isLoading={isLoading}
+                            />
                             <ScrollToDown messages={messages}/>
                         </div>
                     </ScrollArea>

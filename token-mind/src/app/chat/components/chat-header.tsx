@@ -6,7 +6,7 @@ interface ChatHeaderProps {
 }
 export const ChatHeader = ({ toggleSidebar } : ChatHeaderProps) => {
     return(
-        <header className="p-4 border-b border-gray-800 flex items-center justify-between">
+        <header className="p-4 h-[68.5px] lg:h-[64.5px] border-b border-gray-800 flex items-center justify-between">
            <div className="flex items-center">
             <Button 
                     variant="ghost" 
@@ -16,7 +16,7 @@ export const ChatHeader = ({ toggleSidebar } : ChatHeaderProps) => {
                 >
                     <Menu className="h-5 w-5" />
                 </Button>
-                <h1 className="text-xl font-bold hidden sm:block">TokenMind Chat</h1>
+                {/* <h1 className="text-xl font-bold block lg:hidden">TokenMind Chat</h1> */}
            </div>
 
             <HeaderRightButton />

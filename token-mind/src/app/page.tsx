@@ -11,7 +11,7 @@ import Logo from "@/components/Logo"
 export default function LandingPage() {
 
   return (
-    <div className="min-h-screen text-black bg-[#80808012]">
+    <div className="min-h-screen text-white bg-black">
       {/* <RedirectToChat /> */}
       <header className="container mx-auto py-6 px-4 flex justify-between items-center">
         {/* <Link href={'/chat'}>Chat</Link> */}

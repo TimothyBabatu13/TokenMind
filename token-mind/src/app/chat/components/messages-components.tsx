@@ -1,15 +1,21 @@
 // import Logo from "@/components/Logo"
 import { LoadingMessage } from "./thinking-components";
-import { UIMessage } from "ai";
+import { ChatRequestOptions, UIMessage } from "ai";
 import { GetTrendingTokenUI } from "../invocation-ui/get-trending-token";
 import { ThinkingCard } from "./thinking-card";
 import TokenCard from "../invocation-ui/get-token-info";
 import KnowledgeMarkdown from "../invocation-ui/knowledge-markdown";
+import { Button } from "@/components/ui/button";
 
 type ViewMessageType = {
   messages: UIMessage[];
+  error: Error | undefined,
+  reload: (chatRequestOptions?: ChatRequestOptions | undefined) => Promise<string | null | undefined>,
+  isLoading: boolean
 };
-export const ViewMessage = ({ messages } : ViewMessageType) => {
+export const ViewMessage = ({ messages, error, reload, isLoading } : ViewMessageType) => {
+
+  console.log(error)
     // console.log(messages)
     return(
       <div>
@@ -103,7 +109,46 @@ export const ViewMessage = ({ messages } : ViewMessageType) => {
                   })}
                 </div>
               ))}
-          
+              
+              { 
+              isLoading && 
+              (<div>
+                <div
+                  key={crypto.randomUUID()}
+                  className={`flex justify-start mb-2`}
+                >
+                  <ThinkingView />
+                </div>
+              </div>
+              )
+              }
+
+              {
+              error && 
+              (<div>
+                <div
+                  key={crypto.randomUUID()}
+                  className={`flex justify-start mb-2`}
+                >
+                  <div
+                    className={`max-w-[80%] rounded-2xl p-4 flex flex-col bg-gray-800 rounded-tl-none`}
+                  >
+                    <ErrorMessageFormat errorMessage={error.message}/>
+                    <Button 
+                      className="w-fit mt-2 cursor-pointer"
+                      onClick={
+                        ()=>{
+                          reload()
+                        }
+                      }
+                    >
+                      Refresh
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              )
+        }
       </div>
     )
 }
@@ -114,6 +159,26 @@ export const ThinkingView = () => {
     )
 }
 
+const ErrorMessageFormat = ({ errorMessage } : {
+  errorMessage: string
+}) => {
+  console.log(errorMessage)
+  let msg: string;
+  switch (errorMessage) {
+    case `"Failed after 3 attempts. Last error: Cannot connect to API: getaddrinfo ENOTFOUND generativelanguage.googleapis.com"`:
+      msg =  "Internet Connectivity error. Check your internet"
+      break;
+  
+    default:
+      msg = "Nothing is here"
+      break;
+  }
+
+  console.log(msg)
+  return (<div>
+    {msg}
+  </div>)
+}
 
 
 // {messages.map((message, index) => (

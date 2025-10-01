@@ -1,9 +1,8 @@
 import Logo from "@/components/Logo"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { BarChart3, LogOut, Repeat, Search, Settings, TrendingUp, X } from "lucide-react"
+import { BarChart3, LogOut, Repeat, Search, TrendingUp, X } from "lucide-react"
 import { SidebarButton } from "./side-bar-button"
-import UserInfo from "./user-info"
 import { useUser } from "@civic/auth-web3/react"
 import { userHasWallet } from "@civic/auth-web3"
 import { useEffect } from "react"
@@ -12,9 +11,9 @@ import { ChatRequestOptions, CreateMessage, Message } from "ai"
 export type append = (message: Message | CreateMessage, chatRequestOptions?: ChatRequestOptions) => Promise<string | null | undefined>
 
 export const SideBar = ({ sidebarOpen, toggleSidebar, append } : {
-    sidebarOpen: boolean,
-    toggleSidebar: ()=>void,
-    append: append
+  sidebarOpen: boolean,
+  toggleSidebar: ()=>void,
+  append: append
 }) => {
    
     const userContext = useUser();
@@ -53,7 +52,7 @@ export const SideBar = ({ sidebarOpen, toggleSidebar, append } : {
       >
         <div className="flex flex-col h-full">
           {/* Sidebar Header */}
-          <div className="p-4 border-b border-gray-700 flex items-center justify-between">
+          <div className="p-4 border-b border-gray-800 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="h-8 w-8 rounded-full bg-gradient-to-r  flex items-center justify-center">
                 <Logo />
@@ -115,28 +114,15 @@ export const SideBar = ({ sidebarOpen, toggleSidebar, append } : {
             </TabsContent>
           </Tabs>
 
-          {/* User Section */}
-          <div className="p-4 border-t border-gray-700">
-            <div className="flex items-center justify-between mb-4">
-              <UserInfo />
-            </div>
-            <div className="flex gap-2 text-black">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="flex-1 border-gray-700 cursor-pointer"
-              >
-                <Settings className="h-4 w-4 mr-1" /> Settings
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="flex-1 border-gray-700 cursor-pointer"
-                onClick={handleLogOut}
-              >
-                <LogOut className="h-4 w-4 mr-1" /> Logout
-              </Button>
-            </div>
+          <div className="p-4.5 border-t border-gray-800 flex justify-center items-center">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="flex-1 border-gray-700 cursor-pointer text-black"
+              onClick={handleLogOut}
+            >
+              <LogOut className="h-4 w-4 mr-1" /> Logout
+            </Button>
           </div>
         </div>
       </div>
