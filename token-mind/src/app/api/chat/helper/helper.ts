@@ -1,6 +1,5 @@
 import { z } from "zod";
-
-import { generateObject } from "ai";
+import { generateObject, type CoreMessage } from "ai";
 import { model } from "@/lib/model";
 import { agents } from "../../../../../ai/agent/agent";
 
@@ -11,65 +10,80 @@ Agent Definitions and Usage Rules:
 
 1. GET_TOKEN_INFO
    - Use only when the user provides a Solana token mint address or contract address.
-   - Example triggers: 
-     - “Tell me about this token 61V8vBaqAGM...”
-     - “Get price for this CA”
-     - “Token info for [address]”
+   - Example triggers:
+     - "Tell me about this token 61V8vBaqAGM..."
+     - "Get price for this CA"
+     - "Token info for [address]"
    - ⚠️ Never use unless a valid Solana address is present in the prompt.
 
 2. KNOWLEDGE
-   - For explaining Solana protocols, developer tools, ecosystem projects, documentation, or general blockchain questions or any solana token or coin.
+   - For explaining Solana protocols, developer tools, ecosystem projects, documentation, or general blockchain questions.
+   - Also use for questions about a NAMED token or coin when no address is present (e.g. "tell me about trump coin", "what's BONK").
    - Example triggers:
-     - “How does staking work on Solana?”
-     - “What’s the Anchor framework?”
-     - “Tell me about Metaplex”
-   - ⚠️ Never use for token stats or prices.
-   -Tell me more about trump coin
-   -tell me more on trump token
+     - "How does staking work on Solana?"
+     - "What's the Anchor framework?"
+     - "Tell me about Metaplex"
+     - "Tell me more about trump coin"
+   - ⚠️ Never use for token stats or prices when a valid address is present — use GET_TOKEN_INFO instead.
 
-3. **GET_TRENDING_TOKEN**
+3. GET_TRENDING_TOKEN
    - Use when the user wants to know about popular or trending tokens right now.
    - Example triggers:
-     - “What tokens are trending?”
-     - “Show me top tokens on Solana”
+     - "What tokens are trending?"
+     - "Show me top tokens on Solana"
    - ⚠️ Only use when user mentions "trending", "popular", or "top tokens".
 
-4. **GET_TWITTER_TRENDING_TOPICS**
-   - Use when the user wants to see what’s trending on Twitter related to crypto or Solana.
+4. GET_TWITTER_TRENDING_TOPICS
+   - Use when the user wants to see what's trending on Twitter related to crypto or Solana.
    - Example triggers:
-     - “What’s trending on Twitter?”
-     - “Solana Twitter trends”
+     - "What's trending on Twitter?"
+     - "Solana Twitter trends"
 
-5. **SWAP_TOKEN**
+5. SWAP_TOKEN
    - Use when the user wants to convert one token into another.
    - Example triggers:
-     - “Swap SOL to USDC”
-     - “I want to convert TRUMP to BONK”
-     - “Exchange tokens”
+     - "Swap SOL to USDC"
+     - "I want to convert TRUMP to BONK"
+     - "Exchange tokens"
 
 🛑 RULES:
-- Never guess. If the input doesn't clearly match any agent, return null.
+- Never guess. If the input doesn't clearly match any agent, return "NONE".
 - Do not combine multiple agents.
-- Use exact agent names from the list below:
+- Use exact agent names from the list below. If nothing matches, return "NONE".
 
 ${agents.map(agent => `- ${agent.name}`).join('\n')}
 `;
 
 
-
+const agentNames = agents.map(agent => agent.name);
 const schema = z.object({
-    agent: z.string()
-})
-export const chooseAgent = async (message: string) => {
+  agent: z.enum(["NONE", ...agentNames] as [string, ...string[]]),
+});
 
+export const chooseAgent = async (history: CoreMessage[]) => {
+  try {
     const { object } = await generateObject({
-        model: model,
-        schema,
-        prompt: message,
-        system
-    })
+      model,
+      schema,
+      system,
+      messages: history,
+      temperature: 0,
+    });
 
-    console.log(agents.find(agent => agent.name === object.agent));
+    if (object.agent === "NONE") {
+      return null;
+    }
 
-    return agents.find(agent => agent.name === object.agent) ?? null;
-}
+    const matched = agents.find(agent => agent.name === object.agent);
+
+    if (!matched) {
+      console.error(`[chooseAgent] model returned unknown agent name: ${object.agent}`);
+      return null;
+    }
+
+    return matched;
+  } catch (error) {
+    console.error("[chooseAgent] routing failed:", error);
+    return null;
+  }
+};
