@@ -3,12 +3,13 @@
 import { cn } from "@/lib/utils"
 import { ComponentProps, useCallback } from "react";
 import { Button } from "../ui/button";
+import Form from "./form";
 
 const suggestedActions = [
-  "What are the advantages of using Next.js?",
-  "Write code to demonstrate Dijkstra's algorithm",
-  "Help me write an essay about Silicon Valley",
-  "What is the weather in San Francisco?",
+  "What's trending on Solana right now?",
+  "How does staking work on Solana?",
+  "Tell me about this token",
+  "What's trending on crypto Twitter today?"
 ];
 
  export type SuggestionProps = Omit<ComponentProps<typeof Button>, "onClick"> & {
@@ -51,10 +52,6 @@ const SuggestedActions = () => {
         "",
   
       );
-    //   sendMessage({
-    //     parts: [{ text: suggestion, type: "text" }],
-    //     role: "user",
-    //   });
     },
     []
   );
@@ -70,7 +67,6 @@ const SuggestedActions = () => {
     >
       {suggestedActions.map((suggestedAction, index) => (
         <div
-        //   animate={{ opacity: 1, y: 0 }}
           className="min-w-[200px] shrink-0 sm:min-w-0 sm:shrink"
         
           key={suggestedAction}
@@ -89,12 +85,40 @@ const SuggestedActions = () => {
     )
 }
 
+const MultiModalHeading = () => {
+    return(
+        <div 
+          className="pointer-events-none inset-0 z-10 flex items-center justify-center"
+        >
+          <div 
+            className="flex flex-col items-center px-4"
+          >
+            <div 
+              className="text-center font-semibold text-2xl tracking-tight text-foreground md:text-3xl" style={{"opacity": "1", "transform": "none"}}
+            >
+              What can I help with?
+            </div>
+            <div 
+              className="mt-3 text-center text-muted-foreground/80 text-sm" 
+              style={{"opacity": "1", "transform": "none"}}
+            >
+              Ask about a token, check what's trending, or swap and create tokens — all in one place.
+            </div>
+          </div>
+        </div>
+    )
+}
+
 const MultimodalInput = ({ className }:{
     className?: string
 }) => {
   return (
-    <div className={cn("relative flex w-[100%] flex-col gap-4", className)}>
-       <SuggestedActions />
+    <div className={cn("relative flex h-[90dvh] w-[100%] flex-col gap-4", className)}>
+      <div className="flex-1 mt-[200px]">
+        <MultiModalHeading />
+      </div>
+      <SuggestedActions />
+      <Form />
     </div>
   )
 }

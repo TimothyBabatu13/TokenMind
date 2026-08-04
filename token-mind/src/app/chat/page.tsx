@@ -1,7 +1,7 @@
-import { ChatHeader } from "@/components/chat/chat-header"
 import MultimodalInput from "@/components/chat/multimodal-input";
 import AppProvider from "@/context/app-provider";
 import { cn } from "@/lib/utils"
+import { PureChatHeader } from "@/components/chat/chat-header";
 
 
 // const Page = () => {
@@ -33,11 +33,7 @@ const ChatShell = () => {
             "flex min-w-0 flex-col bg-sidebar transition-[width] w-full duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]",
           )}
         >
-          <ChatHeader
-            chatId={'chatId'}
-            isReadonly={Boolean('isReadonly')}
-            selectedVisibilityType={Boolean('visibilityType')}
-          />
+          <PureChatHeader />
 
           
 
