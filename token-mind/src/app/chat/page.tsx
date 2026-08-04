@@ -1,13 +1,8 @@
-// import { ProtectChat } from "@/components/server-page";
-// import ChatPage from "./components/ChatPage";
-
-import { AppSidebar } from "@/components/chat/app-side-bar";
 import { ChatHeader } from "@/components/chat/chat-header"
 import MultimodalInput from "@/components/chat/multimodal-input";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import AppProvider from "@/context/app-provider";
 import { cn } from "@/lib/utils"
-import { Suspense } from "react";
-import { Toaster } from "sonner";
+
 
 // const Page = () => {
 // 	return (
@@ -19,41 +14,23 @@ import { Toaster } from "sonner";
 // }
 // export default Page;
 
-async function Page({ children }: { children: React.ReactNode }) {
-
+function Page() {
   return (
-    <SidebarProvider defaultOpen={true}>
-      <AppSidebar  />
-      <SidebarInset>
-        <Toaster
-          position="top-center"
-          theme="system"
-          toastOptions={{
-            className:
-              "!bg-card !text-foreground !border-border/50 !shadow-[var(--shadow-float)]",
-          }}
-        />
-        <Suspense fallback={<div className="flex h-dvh" />}>
-          {/* <ActiveChatProvider> */}
-            <ChatShell />
-          {/* </ActiveChatProvider> */}
-        </Suspense>
-        {children}
-      </SidebarInset>
-    </SidebarProvider>
+    <AppProvider>
+      <ChatShell />
+    </AppProvider>
   );
 }
 
 const ChatShell = () => {
   const messages = [];
   return (
-	<SidebarProvider>
+	<>
   
       <div className="flex h-dvh w-full flex-row overflow-hidden">
         <div
           className={cn(
-            "flex min-w-0 flex-col bg-sidebar transition-[width] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]",
-            // Boolean('isArtifactVisible') ? "w-[40%]" : "w-full"
+            "flex min-w-0 flex-col bg-sidebar transition-[width] w-full duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]",
           )}
         >
           <ChatHeader
@@ -111,7 +88,7 @@ const ChatShell = () => {
 
       {/* <DataStreamHandler /> */}
 
-    </SidebarProvider>
+    </>
   )
 }
 

@@ -4,6 +4,7 @@ import "./globals.css";
 import AuthSession from "@/context/AuthSession";
 import { Toaster } from "@/components/ui/sonner"
 import WalletAdapter from "@/context/wallet-adapter";
+import { ThemeProvider } from "next-themes";
 
 
 
@@ -54,12 +55,19 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <WalletAdapter>
-          <AuthSession>
-            {children}
-            <Toaster />
-          </AuthSession>
-        </WalletAdapter>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          disableTransitionOnChange
+          enableSystem
+        >
+          <WalletAdapter>
+            <AuthSession>
+              {children}
+              <Toaster />
+            </AuthSession>
+          </WalletAdapter>
+        </ThemeProvider>
       </body>
     </html>
   );

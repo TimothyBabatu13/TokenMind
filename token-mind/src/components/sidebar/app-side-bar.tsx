@@ -10,12 +10,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
-import { useSWRConfig } from "swr";
-import { unstable_serialize } from "swr/infinite";
-// import {
-//   getChatHistoryPaginationKey,
-//   SidebarHistory,
-// } from "@/components/chat/sidebar-history";
 
 import {
   Sidebar,
@@ -34,11 +28,12 @@ import {
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "../ui/alert-dialog";
+import SidebarUserNav from "./side-bar-nav";
+
 
 export function AppSidebar() {
   const router = useRouter();
   const { setOpenMobile, toggleSidebar } = useSidebar();
-  const { mutate } = useSWRConfig();
   const [showDeleteAllDialog, setShowDeleteAllDialog] = useState(false);
 
   const closeMobile = useCallback(() => {
@@ -49,10 +44,6 @@ export function AppSidebar() {
     toggleSidebar();
   }, [toggleSidebar]);
 
-  const handleNewChat = useCallback(() => {
-    setOpenMobile(false);
-    router.push("/");
-  }, [router, setOpenMobile]);
 
   const handleShowDeleteAllDialog = useCallback(() => {
     setShowDeleteAllDialog(true);
@@ -60,17 +51,9 @@ export function AppSidebar() {
 
   const handleDeleteAll = useCallback(() => {
     setShowDeleteAllDialog(false);
-    router.replace("/");
-    // mutate(unstable_serialize(getChatHistoryPaginationKey), [], {
-    //   revalidate: false,
-    // });
-
-    // fetch(`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/api/history`, {
-    //   method: "DELETE",
-    // });
 
     toast.success("All chats deleted");
-  }, [mutate, router]);
+  }, [router]);
 
   return (
     <>
@@ -115,7 +98,9 @@ export function AppSidebar() {
                 <SidebarMenuItem>
                   <SidebarMenuButton
                     className="h-8 rounded-lg border border-sidebar-border text-[13px] text-sidebar-foreground/70 transition-colors duration-150 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
-                    onClick={handleNewChat}
+                    onClick={()=>{
+                        console.log('open new chat')
+                    }}
                     tooltip="New Chat"
                   >
                     <PenSquareIcon className="size-4" />
@@ -140,7 +125,7 @@ export function AppSidebar() {
           {/* <SidebarHistory user={user} /> */}
         </SidebarContent>
         <SidebarFooter className="border-t border-sidebar-border pt-2 pb-3">
-          {/* {user ? <SidebarUserNav user={user} /> : null} */}
+          <SidebarUserNav  /> 
         </SidebarFooter>
         <SidebarRail />
       </Sidebar>

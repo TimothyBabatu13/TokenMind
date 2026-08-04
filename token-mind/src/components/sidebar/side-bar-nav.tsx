@@ -18,11 +18,11 @@ import {
 } from "@/components/ui/sidebar";
 
 
-export function SidebarUserNav() {
+const SidebarUserNav = () => {
   const router = useRouter();
   const { setTheme, resolvedTheme, themes } = useTheme();
 
-    console.log(themes)
+    
   const handleThemeSelect = useCallback(() => {
     setTheme(resolvedTheme === "dark" ? "light" : "dark");
   }, [resolvedTheme, setTheme]);
@@ -64,7 +64,7 @@ export function SidebarUserNav() {
                   }}
                 />
                 <span className="truncate text-[13px]" data-testid="user-email">
-                 
+                  {"Guest"}
                 </span>
                 <ChevronUp className="ml-auto size-3.5 text-sidebar-foreground/50" />
               </SidebarMenuButton>
@@ -89,7 +89,7 @@ export function SidebarUserNav() {
                 onClick={handleAuthClick}
                 type="button"
               >
-                {/* {isGuest ? "Login to your account" : "Sign out"} */}
+                "Login to your account" 
               </button>
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -98,3 +98,5 @@ export function SidebarUserNav() {
     </SidebarMenu>
   );
 }
+
+export default SidebarUserNav

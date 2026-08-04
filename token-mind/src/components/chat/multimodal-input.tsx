@@ -93,7 +93,7 @@ const MultimodalInput = ({ className }:{
     className?: string
 }) => {
   return (
-    <div className={cn("relative flex w-[100%] bg-amber-200 flex-col gap-4", className)}>
+    <div className={cn("relative flex w-[100%] flex-col gap-4", className)}>
        <SuggestedActions />
     </div>
   )
