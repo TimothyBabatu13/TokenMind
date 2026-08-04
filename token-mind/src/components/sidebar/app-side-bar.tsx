@@ -29,11 +29,13 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "../ui/alert-dialog";
 import SidebarUserNav from "./side-bar-nav";
+import { useAIChatProvider } from "@/context/ai-chat-provider";
 
 
 export function AppSidebar() {
   const router = useRouter();
   const { setOpenMobile, toggleSidebar } = useSidebar();
+  const { setMessages } = useAIChatProvider()
   const [showDeleteAllDialog, setShowDeleteAllDialog] = useState(false);
 
   const closeMobile = useCallback(() => {
@@ -99,7 +101,7 @@ export function AppSidebar() {
                   <SidebarMenuButton
                     className="h-8 rounded-lg border border-sidebar-border text-[13px] text-sidebar-foreground/70 transition-colors duration-150 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
                     onClick={()=>{
-                        console.log('open new chat')
+                      setMessages([])
                     }}
                     tooltip="New Chat"
                   >

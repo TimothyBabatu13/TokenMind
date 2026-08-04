@@ -11,7 +11,7 @@ const Form = () => {
         >
             {/*  */}
             <Textarea 
-                className="bg-transparent! border-0 min-h-[96px]! max-h-[192px]! resize-none focus-visible:ring-0! w-full scroll-area"
+                className="bg-transparent! border-0 min-h-[96px]! max-h-[96px]! resize-none focus-visible:ring-0! w-full scroll-area"
             />
 
            <div className="flex items-center justify-end px-3 pb-4">
