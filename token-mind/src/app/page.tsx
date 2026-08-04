@@ -5,10 +5,11 @@ import { StepCard } from "@/components/step-card"
 import FooterYear from "@/components/footer-date"
 import { GetStartedButton } from "@/components/client-buttons"
 import Logo from "@/components/Logo"
+import { redirect } from "next/navigation"
 
 
 export default function LandingPage() {
-
+  return redirect('/chat');
   return (
     <div className="min-h-screen text-white bg-black">
       <header className="container mx-auto py-6 px-4 flex justify-between items-center">
