@@ -1,12 +1,12 @@
-import { ProtectChat } from "@/components/server-page";
-import ChatPage from "./components/ChatPage";
+import AppProvider from "@/context/app-provider";
+import ChatShell from "@/components/chat/chat-shell";
 
-const Page = () => {
-	return (
-		<section>
-			<ProtectChat />
-			<ChatPage />
-		</section>
-	)
+function Page() {
+  return (
+    <AppProvider>
+      <ChatShell/>
+    </AppProvider>
+  );
 }
-export default Page;
+
+export default Page

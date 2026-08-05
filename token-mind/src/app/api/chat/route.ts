@@ -11,14 +11,8 @@ ${agents.map(agent => `${agent.name}: ${agent.systemPrompt}`).join("\n")}
   Unless explicitly stated, you should not reiterate the output of the tool as it is shown in the user interface
 `;
 
-// Use the SDK's own client message shape (this is what useChat sends:
-// role + content + optional parts) instead of a hand-rolled type — the SDK's
-// internal types (CoreMessage) have a stricter content union per role
-// (assistant/tool content can be an array of parts, not just a string),
-// so a custom type will fight the overloads. convertToCoreMessages()
-// below does that normalization for us.
+
 const isValidSolanaAddress = (address: string): boolean => {
-  // Base58, 32-44 chars — a shape check, not a guarantee the account exists.
   return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address);
 };
 
@@ -68,7 +62,6 @@ export const POST = async (req: NextRequest) => {
     ? `${systemPrompt}. This current user's wallet address is ${walletAddress}`
     : `${systemPrompt}. No wallet address is currently connected for this user.`;
 
-  // --- Routing: failures here are caught and fall back to plain chat ---
   let agent: Awaited<ReturnType<typeof chooseAgent>> = null;
   try {
     agent = await chooseAgent(conversationHistory);
@@ -119,3 +112,5 @@ export const POST = async (req: NextRequest) => {
     );
   }
 };
+
+// ticket, logs and monitoring, and finance.

@@ -4,45 +4,24 @@ import { useState } from "react"
 import { Copy, Check } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-// import { Skeleton } from "@/components/ui/skeleton"
+import { JupiterTokenData } from "../../../ai/agent/trending-token/type"
 
-type TokenInfo = {
-    address: string;
-    name: string;
-    symbol: string;
-    decimals: number;
-    logoURI: string;
-    tags: string[];
-    daily_volume: number;
-    created_at: string;
-    freeze_authority: string | null;
-    mint_authority: string | null;
-    permanent_delegate: string | null;
-    minted_at: string | null;
-    extensions: {
-      coingeckoId?: string;
-      // [key: string]: string;
-    };
-  };
-  
-  type GetTrendingTokenUIProps = {
-    data: TokenInfo[];
+type GetTrendingTokenUIProps = {
+    data: JupiterTokenData[];
     prices: number[];
-  };
+};
 
-
-
+const currencyFormater = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  });
 
 export const GetTrendingTokenUI = ({data, prices}: GetTrendingTokenUIProps) => {
-
 
   const [copied, setCopied] = useState(false);
   const [text, setText] = useState('');
   
-  const currencyFormater = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  });
+  
   const copyToClipboard = async (address: string) => {
     setText(address);
     await navigator.clipboard.writeText(address);

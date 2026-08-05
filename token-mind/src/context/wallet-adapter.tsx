@@ -15,10 +15,7 @@ const WalletAdapter = ({ children }:{
     children: React.ReactNode
 }) => {
 
-    const environment = process.env.NODE_ENV === 'development' ? 'This is a development thing' : 'This is a production thing';
     const network = process.env.NODE_ENV === 'development' ? WalletAdapterNetwork.Devnet : WalletAdapterNetwork.Mainnet;
-
-    console.log(environment)
     
     const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 

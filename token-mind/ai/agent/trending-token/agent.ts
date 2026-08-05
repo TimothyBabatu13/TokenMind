@@ -3,6 +3,7 @@ import { JupiterTokenData } from "./type";
 
 export const getTrendingTokens = async () => {
     const apiEndpoint = 'https://tokens.jup.ag/tokens?tags=birdeye-trending';
+    console.log(apiEndpoint)
     try {
         const api = await fetch(apiEndpoint);
         if(!api.ok){
@@ -11,6 +12,7 @@ export const getTrendingTokens = async () => {
         let tokens: JupiterTokenData[] = await api.json();
 
         tokens = tokens.slice(0, 10);
+        console.log(tokens)
 
         const prices = await Promise.all(tokens.map(async (token) => {
             const price = await getTokenPrice(token.address);
