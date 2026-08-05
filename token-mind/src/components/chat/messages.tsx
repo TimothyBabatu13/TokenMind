@@ -7,6 +7,7 @@ import Form from "./form";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useEffect, useRef } from "react";
+import { ToolRenderer } from "./tools";
 
 
 
@@ -86,7 +87,11 @@ const Messages = () => {
         className="sticky bottom-0 z-1 mx-auto flex w-full max-w-4xl gap-2 border-t-0 bg-background px-2 pb-3 md:px-4 md:pb-4"
     >
         <div className={cn("relative flex h-[90dvh] w-[100%] mt-[20px] flex-col gap-4")}>
-            <div ref={containerRef} onScroll={handleScroll} className="flex-1 absolute top-0 left-0 right-0 bottom-0 overflow-y-auto h-[68dvh] scroll-area space-y-[10px]">
+            <div 
+                ref={containerRef} 
+                onScroll={handleScroll} 
+                className="flex-1 absolute pt-[10px] top-0 left-0 right-0 bottom-0 overflow-y-auto h-[68dvh] scroll-area space-y-[10px]"
+            >
                 {
                     messages.map(message => (
                         <div key={message.id}>
@@ -100,7 +105,7 @@ const Messages = () => {
                                         case "reasoning":
                                             return null
                                         case "tool-invocation":
-                                            return null
+                                            return <ToolRenderer parts={[part]} />
                                         case "source":
                                             return null
                                         case "file":

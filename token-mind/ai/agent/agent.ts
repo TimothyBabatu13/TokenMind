@@ -1,5 +1,6 @@
 import { getKnowledgeAgent, getTokenInfoAgent, getTrendingTokensAgent, getTwitterTrendingAgents, swapTokenAgent } from "../agents";
 import { knowledgeAIsystemPrompt } from "../knowledge/agent";
+export type TOOL_NAMES = "GET_TRENDING_TOKEN" | "KNOWLEDGE" | "GET_TOKEN_INFO" | "GET_TWITTER_TRENDING_TOPICS" | "SWAP_TOKEN"
 
 export const agents  = [
     {
