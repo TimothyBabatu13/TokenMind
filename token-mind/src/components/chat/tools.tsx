@@ -1,8 +1,8 @@
 import React, { JSX } from "react";
 import { GetTrendingTokenUI } from "../tools_invocation_ui/trending-token-ui";
-import { ThinkingCard } from "@/app/chat/components/thinking-card";
 import TokenCard from "../tools_invocation_ui/token-card";
 import { TOOL_NAMES } from "../../../ai/agent/agent";
+import { ThinkingCard } from "./thinking-card";
 
 interface ToolInvocation {
   toolCallId: string;
