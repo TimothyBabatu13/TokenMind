@@ -7,49 +7,21 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { shortenWalletAddress } from "@/hooks/use-shorten-wallet"
+import { TokenDetails } from "../../../ai/agent/get-token-info/type"
 
-type tokenInfo ={
-  mint: string;
-        standard: string;
-        name: string;
-        symbol: string; 
-        logo: string;
-        decimals: string;
-        metaplex: {
-            metadataUri: string;
-            masterEdition: boolean;
-            isMutable: boolean; 
-            sellerFeeBasisPoints: number;
-            updateAuthority: string;
-            primarySaleHappened: number; 
-        };
-        fullyDilutedValue: string; 
-        totalSupply: string; 
-        totalSupplyFormatted: string;
-        links: {
-            reddit?: string;
-            telegram?: string;
-            twitter?: string;
-            website?: string;
-            moralis?: string;
-    };
-    description: string | null;
-    isVerifiedContract: boolean;
-}
-
-export default function TokenCard({ data } : {
-  data: tokenInfo
-}) {
-    const info = data;
-
-
-  const formatNumber = (num: string) => {
+const formatNumber = (num: string) => {
     return Number.parseFloat(num).toLocaleString("en-US", {
       maximumFractionDigits: 2,
     })
   }
-  
 
+export default function TokenCard({ data } : {
+  data: TokenDetails['body']
+}) {
+  
+  const info = data;
+
+  const isTokenIfo = Boolean(info) && Boolean(info.links)
   return (
     <Card className="w-full max-w-md overflow-hidden border-2 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
       <CardHeader className="pb-0">
@@ -125,7 +97,7 @@ export default function TokenCard({ data } : {
 
       <CardFooter className="flex justify-between border-t bg-slate-50 p-4 dark:bg-slate-800/50">
         <div className="flex gap-2">
-          {info.links.website && (
+          {isTokenIfo && info.links.website && (
             <Link href={info.links.website} target="_blank" rel="noopener noreferrer">
               <Button variant="outline" size="icon" className="h-8 w-8 rounded-full">
                 <Globe className="h-4 w-4" />
@@ -133,7 +105,7 @@ export default function TokenCard({ data } : {
               </Button>
             </Link>
           )}
-          {info.links.twitter && (
+          {isTokenIfo && info.links.twitter && (
             <Link href={info.links.twitter} target="_blank" rel="noopener noreferrer">
               <Button variant="outline" size="icon" className="h-8 w-8 rounded-full">
                 <Twitter className="h-4 w-4" />
@@ -141,7 +113,7 @@ export default function TokenCard({ data } : {
               </Button>
             </Link>
           )}
-          {info.links.telegram && (
+          {isTokenIfo && info.links.telegram && (
             <Link href={info.links.telegram} target="_blank" rel="noopener noreferrer">
               <Button variant="outline" size="icon" className="h-8 w-8 rounded-full">
                 <MessageCircle className="h-4 w-4" />
@@ -150,13 +122,13 @@ export default function TokenCard({ data } : {
             </Link>
           )}
         </div>
-        <Link href={info.links.moralis || ''} target="_blank" rel="noopener noreferrer">
+        {isTokenIfo && <Link href={info.links.moralis || ''} target="_blank" rel="noopener noreferrer">
           <Button variant="default" size="sm">
             <a href={`https://solscan.io/token/${info.mint}`}>
                 View on Solscan
             </a>
           </Button>
-        </Link>
+        </Link>}
       </CardFooter>
     </Card>
   )

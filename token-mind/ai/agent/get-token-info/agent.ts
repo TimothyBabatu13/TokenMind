@@ -1,5 +1,14 @@
 import { TokenDetails } from "./type";
 
+const moralisApiKey = process.env.MORALIS_API_KEY!
+const options = {
+    method: 'GET',
+    headers: {
+        accept: 'application/json',
+        'X-API-Key': moralisApiKey
+    },
+};
+
 export const getTokenInfo = async ({ walletAddress } :  {
     walletAddress: string
 }) => {
@@ -9,14 +18,6 @@ export const getTokenInfo = async ({ walletAddress } :  {
             message: 'Please provide wallet address for the token you want to get information on.'
         }
     }
-    const moralisApiKey = process.env.MORALIS_API_KEY!
-    const options = {
-        method: 'GET',
-        headers: {
-            accept: 'application/json',
-            'X-API-Key': moralisApiKey
-        },
-    };
     
     try {
         
