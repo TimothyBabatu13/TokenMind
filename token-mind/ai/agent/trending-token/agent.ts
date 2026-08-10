@@ -1,4 +1,3 @@
-import { getTokenPrice } from "../get-token-price/agent";
 import { JupiterTokenData } from "./type";
 
 const apiKey = process.env.BIRD_EYE_API_KEY ?? ''

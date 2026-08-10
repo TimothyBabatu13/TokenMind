@@ -55,6 +55,7 @@ Create .env.local file and add these environment variables
 ```bash 
 CIVIC_AUTH_SECRET="***************"
 GEMINI_KEY="********"
+BIRD_EYE_API_KEY="********"
 ```
 
 Run the app
