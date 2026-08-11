@@ -24,42 +24,11 @@ export const getTokenInfo = async ({ walletAddress } :  {
 
         const api = await fetch(`https://public-api.birdeye.so/defi/token_overview?address=${walletAddress}&ui_amount_mode=scaled`, options)
         const response = await api.json() as TokenResponse
-        const mappedData: TokenDetails = {
-            message: "Found Information about this token The user is shown the token, do not list it. Ask the user what they want to do with the coin.",
-            body: {
-                mint: response.data.address,
-                standard: "SPL",
-                name: response.data.name,
-                symbol: response.data.name,
-                logo: response.data.logoURI,
-                decimals: String(response.data.decimals),
-                price: response.data.price,
-                metaplex: {
-                    metadataUri: "",
-                    masterEdition: false, 
-                    isMutable: true,
-                    sellerFeeBasisPoints: 0, 
-                    updateAuthority: "", 
-                    primarySaleHappened: 0
-                },
-                fullyDilutedValue: String(response.data.fdv),
-                totalSupply: String(response.data.totalSupply),
-                totalSupplyFormatted: response.data.totalSupply.toLocaleString(),
-                links: {
-                    twitter: response.data.extensions?.twitter,
-                    website: response.data.extensions?.website,
-                    reddit: undefined,
-                    moralis: undefined
-                },
-                description: response.data.extensions?.description || null,
-                isVerifiedContract: false 
-            }
-            };
         
         return {
             message: 'Found Information about this token The user is shown the token, do not list it. Ask the user what they want to do with the coin.',
             body: {
-                mappedData
+                response
             }
         }
         
