@@ -33,6 +33,7 @@ export const getTokenInfo = async ({ walletAddress } :  {
                 symbol: response.data.name,
                 logo: response.data.logoURI,
                 decimals: String(response.data.decimals),
+                price: response.data.price,
                 metaplex: {
                     metadataUri: "",
                     masterEdition: false, 
@@ -51,9 +52,9 @@ export const getTokenInfo = async ({ walletAddress } :  {
                     moralis: undefined
                 },
                 description: response.data.extensions?.description || null,
-                isVerifiedContract: false }
+                isVerifiedContract: false 
+            }
             };
-        
         
         return {
             message: 'Found Information about this token The user is shown the token, do not list it. Ask the user what they want to do with the coin.',

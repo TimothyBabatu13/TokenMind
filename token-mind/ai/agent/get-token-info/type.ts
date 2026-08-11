@@ -6,6 +6,7 @@ export type TokenDetails = {
         name: string;
         symbol: string; 
         logo: string;
+        price: number
         decimals: string;
         metaplex: {
             metadataUri: string;

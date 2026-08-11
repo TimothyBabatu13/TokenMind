@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { generateObject, type CoreMessage } from "ai";
+import { generateObject, generateText, type CoreMessage, Output } from "ai";
 import { model } from "@/lib/model";
 import { agents } from "../../../../../ai/agent/agent";
 
@@ -59,20 +59,20 @@ const agentNames = agents.map(agent => agent.name);
 const schema = z.object({
   agent: z.enum(["NONE", ...agentNames] as [string, ...string[]]),
 });
+type SchemaType = z.infer<typeof schema>;
 
 export const chooseAgent = async (history: CoreMessage[]) => {
   try {
-    const { object } = await generateObject({
+    const { experimental_output } = await generateText({
       model,
-      schema,
+      experimental_output: Output.object({schema: schema}),      
       system,
       messages: history,
       temperature: 0,
       maxTokens: 4096,
-      mode: "json"
-    }) as { object: { agent: string } }
+    });
 
-    console.log(object)
+    const object= experimental_output as SchemaType;
 
     if (object.agent === "NONE") {
       return null;
