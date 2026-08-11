@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { shortenWalletAddress } from "@/hooks/use-shorten-wallet"
-import { TokenDetails } from "../../../ai/agent/get-token-info/type"
+import { TokenResponse } from "../../../ai/agent/get-token-info/type"
 import TokenDisplay from "../token-display"
 
 const formatNumber = (num: string) => {
@@ -17,13 +17,10 @@ const formatNumber = (num: string) => {
   }
 
 export default function TokenCard({ data } : {
-  data: TokenDetails['body']
+  data: TokenResponse['data']
 }) {
-  
-  const info = data;
-  console.log(info)
 
-  return <TokenDisplay token={info}/>
+  return <TokenDisplay token={data}/>
 //   const isTokenIfo = Boolean(info) && Boolean(info.links)
 //   return (
 //     <Card className="w-full max-w-md overflow-hidden border border-gray-700 
