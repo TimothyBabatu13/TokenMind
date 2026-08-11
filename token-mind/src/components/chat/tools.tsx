@@ -63,7 +63,7 @@ const toolConfig: Partial<Record<
       renderCall(callId, args?.message ?? "", "Token Info Ai Agent thinking"),
     result: (callId, result) =>
       renderResult(callId, TokenCard, {
-        data: result?.res?.body?.res,
+        data: result?.res.body?.mappedData.body
       }),
   },
 };
