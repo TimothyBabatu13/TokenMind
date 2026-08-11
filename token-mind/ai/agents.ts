@@ -37,7 +37,6 @@ export const getTokenInfoAgent = tool({
             return 'Please provide wallet address'
         }
         const res = await getTokenInfo({walletAddress: address})
-        console.log(res)
         return{
             res
         }

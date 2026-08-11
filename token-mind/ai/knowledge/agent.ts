@@ -25,12 +25,12 @@ Do not list the links separately at the end of your response. Instead, naturally
 Make sure all URLs are valid and point to real resources. Prefer official documentation when available.
 `
 
-
+type SchemaType = z.infer<typeof schema>;
 export const KnowledgeAgent = async (args: string) => {
     try {
         const { object } = await generateObject({
             model: model,
-            schema,
+            schema: schema,
             system: knowledgeAIsystemPrompt,
             messages: [
                 {
@@ -40,12 +40,12 @@ export const KnowledgeAgent = async (args: string) => {
                 }
             ],
         })
-        console.log(object, 'from here')
+        const response = object as SchemaType
         return{
             message: `Here is information about ${args} on SOLANA`,
             body: {
-                information: object.information,
-                links: object.links
+                information: response.information,
+                links: response.links
             }
         }
     } catch (error) {

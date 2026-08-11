@@ -1,0 +1,1 @@
+export const BIRD_EYE_API_KEY = process.env.BIRD_EYE_API_KEY ?? ''

@@ -1,10 +1,9 @@
+import { BIRD_EYE_API_KEY } from "@/constants/api_keys";
 import { JupiterTokenData } from "./type";
-
-const apiKey = process.env.BIRD_EYE_API_KEY ?? ''
 
 const options = {
   method: 'GET',
-  headers: {'x-chain': 'solana', accept: 'application/json', 'X-API-KEY': apiKey}
+  headers: {'x-chain': 'solana', accept: 'application/json', 'X-API-KEY': BIRD_EYE_API_KEY}
 };
 
 interface TokenReturnType {
