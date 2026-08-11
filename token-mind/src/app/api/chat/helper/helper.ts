@@ -68,7 +68,11 @@ export const chooseAgent = async (history: CoreMessage[]) => {
       system,
       messages: history,
       temperature: 0,
-    });
+      maxTokens: 4096,
+      mode: "json"
+    }) as { object: { agent: string } }
+
+    console.log(object)
 
     if (object.agent === "NONE") {
       return null;

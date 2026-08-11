@@ -30,7 +30,7 @@ export const KnowledgeAgent = async (args: string) => {
     try {
         const { object } = await generateObject({
             model: model,
-            schema,
+            schema: schema,
             system: knowledgeAIsystemPrompt,
             messages: [
                 {
@@ -40,7 +40,7 @@ export const KnowledgeAgent = async (args: string) => {
                 }
             ],
         })
-        console.log(object, 'from here')
+    
         return{
             message: `Here is information about ${args} on SOLANA`,
             body: {
