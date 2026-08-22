@@ -81,6 +81,7 @@ export const POST = async (req: NextRequest) => {
       toolChoice: agent ? "auto" : undefined,
       maxSteps: 10,
       maxRetries: 0,
+      maxTokens: 8000,
       onError: ({ error }) => {
         // This is what actually surfaces tool failures, model hiccups, etc.
         // that happen after the response has already started streaming.

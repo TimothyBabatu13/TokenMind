@@ -96,3 +96,4 @@ export const GetTrendingTokenUI = ({data, prices}: GetTrendingTokenUIProps) => {
     </div>
   )
 }
+
