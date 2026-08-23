@@ -28,3 +28,22 @@ export async function checkAndIncrementUsage(
   const allowed = ipCount <= dailyLimit && fpCount <= dailyLimit;
   return { allowed, remaining: Math.max(0, dailyLimit - Math.max(ipCount, fpCount)) };
 }
+
+
+export async function peekUsage(
+  ip: string,
+  fingerprint: string | null,
+  dailyLimit: number
+): Promise<{ remaining: number }> {
+  const ipKey = getTodayKey(`ip:${ip}`);
+  const ipCount = (await redis.get<number>(ipKey)) ?? 0;
+
+  let fpCount = 0;
+  if (fingerprint) {
+    const fpKey = getTodayKey(`fp:${fingerprint}`);
+    fpCount = (await redis.get<number>(fpKey)) ?? 0;
+  }
+
+  const used = Math.max(ipCount, fpCount);
+  return { remaining: Math.max(0, dailyLimit - used) };
+}

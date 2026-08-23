@@ -6,6 +6,10 @@ import { model } from "@/lib/model";
 import { agents } from "../../../../ai/agent/agent";
 import { matchDeterministicIntent } from "../../../../ai/agent/static-response";
 import { respondWithDirectText, respondWithDirectToolResult } from "@/lib/direct-tool-response";
+import { getToken } from "next-auth/jwt";
+import { getClientIp } from "@/lib/get-client-ip";
+import { checkAndIncrementUsage } from "@/lib/rate-limit";
+import { GUEST_DAILY_LIMIT } from "@/constants/constants";
 
 const systemPrompt = `You are TokenMind — an intelligent assistant with access to specialized tools. Each tool below has a name and purpose. Use the tool that clearly matches the user's request; do not guess or combine tools.
 
@@ -52,6 +56,20 @@ export const POST = async (req: NextRequest) => {
       { error: "The last message must have non-empty text content." },
       { status: 400 }
     );
+  }
+  
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  
+  if (!token) {
+    const ip = getClientIp(req);
+    const fingerprint = req.headers.get("x-fingerprint");
+    const { allowed } = await checkAndIncrementUsage(ip, fingerprint, GUEST_DAILY_LIMIT);
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "You've reached today's guest limit. Sign in for unlimited access." },
+        { status: 429 }
+      );
+    }
   }
 
   const matchedIntent = matchDeterministicIntent(lastMessage.content);
