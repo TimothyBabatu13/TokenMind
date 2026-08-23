@@ -1,16 +1,21 @@
+export const runtime = "edge";
+
 import { streamText, convertToCoreMessages, type Message } from "ai";
 import { NextRequest, NextResponse } from "next/server";
-import { chooseAgent } from "./helper/helper";
 import { model } from "@/lib/model";
 import { agents } from "../../../../ai/agent/agent";
+import { matchDeterministicIntent } from "../../../../ai/agent/static-response";
+import { respondWithDirectText, respondWithDirectToolResult } from "@/lib/direct-tool-response";
 
-const systemPrompt = `You are TokenMind agents that each have specialized tasks.
-Given this list of agents and their capabilities, choose the one that is most appropriate for the user's request.
+const systemPrompt = `You are TokenMind — an intelligent assistant with access to specialized tools. Each tool below has a name and purpose. Use the tool that clearly matches the user's request; do not guess or combine tools.
+
 ${agents.map(agent => `${agent.name}: ${agent.systemPrompt}`).join("\n")}
-  If any of these does not fall into user's prompt, do well to answer the user without. Anything that falls outside of this, do not reply to it. Kindly reply the user that it is not part of what you are built for. Always make your response concise and avoid buzz words.
-  Unless explicitly stated, you should not reiterate the output of the tool as it is shown in the user interface
-`;
 
+Rules:
+- Only use a tool when the user's request clearly matches its stated purpose.
+- If the user's request does not match any tool and isn't general knowledge you can answer directly, reply that it's outside what you're built for. Be concise, no buzzwords.
+- Unless explicitly asked, do not restate a tool's output verbatim — the UI already shows it.
+`;
 
 const isValidSolanaAddress = (address: string): boolean => {
   return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address);
@@ -20,6 +25,10 @@ const getLastTenMessages = (arr: Message[]): Message[] => {
   return arr.slice(-10);
 };
 
+// All agents' tools merged into one map — the model picks via native tool-calling,
+// no separate router call needed.
+const allTools = Object.fromEntries(agents.map(a => [a.name, a.tools]));
+
 export const POST = async (req: NextRequest) => {
   let messages: Message[];
 
@@ -27,10 +36,7 @@ export const POST = async (req: NextRequest) => {
     const body = await req.json();
     messages = body?.messages;
   } catch {
-    return NextResponse.json(
-      { error: "Invalid JSON body." },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
   }
 
   if (!Array.isArray(messages) || messages.length === 0) {
@@ -48,6 +54,16 @@ export const POST = async (req: NextRequest) => {
     );
   }
 
+  const matchedIntent = matchDeterministicIntent(lastMessage.content);
+  if (matchedIntent) {
+    console.log("[route] matched deterministic intent:", matchedIntent.name);
+    if (matchedIntent.type === "tool") {
+      const payload = await matchedIntent.getPayload();
+      return respondWithDirectToolResult(matchedIntent.toolName, payload);
+    }
+    return respondWithDirectText(matchedIntent.getText());
+  }
+
   const rawWalletAddress = req.nextUrl.searchParams.get("walletAddress");
   const walletAddress =
     rawWalletAddress && isValidSolanaAddress(rawWalletAddress) ? rawWalletAddress : null;
@@ -59,47 +75,36 @@ export const POST = async (req: NextRequest) => {
   const recentMessages = getLastTenMessages(messages);
   const conversationHistory = convertToCoreMessages(recentMessages);
   const scopedSystemPrompt = walletAddress
-    ? `${systemPrompt}. This current user's wallet address is ${walletAddress}`
-    : `${systemPrompt}. No wallet address is currently connected for this user.`;
-
-  let agent: Awaited<ReturnType<typeof chooseAgent>> = null;
-  try {
-    agent = await chooseAgent(conversationHistory);
-  } catch (error) {
-    console.error("[route] unexpected error choosing agent:", error);
-    agent = null;
-  }
-
-  console.log("[route] routed to agent:", agent?.name ?? "NONE");
+    ? `${systemPrompt}\nThis current user's wallet address is ${walletAddress}`
+    : `${systemPrompt}\nNo wallet address is currently connected for this user.`;
 
   try {
     const result = streamText({
       model,
       system: scopedSystemPrompt,
       messages: conversationHistory,
-      tools: agent ? { [agent.name]: agent.tools } : undefined,
-      toolChoice: agent ? "auto" : undefined,
+      tools: allTools,
+      toolChoice: "auto",
       maxSteps: 10,
       maxRetries: 0,
       maxTokens: 8000,
+      onStepFinish: ({ toolCalls }) => {
+        if (toolCalls?.length) {
+          console.log("[route] tool(s) used:", toolCalls.map(t => t.toolName));
+        }
+      },
       onError: ({ error }) => {
-        // This is what actually surfaces tool failures, model hiccups, etc.
-        // that happen after the response has already started streaming.
         console.error("[route] stream error:", error);
       },
     });
 
     return result.toDataStreamResponse({
       getErrorMessage: (error) => {
-        // Controls what the client sees in-stream on failure.
-        // Keep this generic — never leak raw error.message to the client.
         console.error("[route] stream-level error surfaced to client:", error);
         return "Something went wrong while generating a response. Please try again.";
       },
     });
   } catch (error) {
-    // Catches only synchronous/setup failures before streaming begins
-    // (e.g. bad tool config, invalid model call).
     const err = error as Error;
     console.error("[route] setup error before streaming started:", {
       message: err.message,
@@ -113,5 +118,3 @@ export const POST = async (req: NextRequest) => {
     );
   }
 };
-
-// ticket, logs and monitoring, and finance.

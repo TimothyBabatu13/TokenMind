@@ -1,0 +1,59 @@
+import { getTrendingTokens } from "../trending-token/agent";
+import { JupiterTokenData } from "../trending-token/type";
+
+export const staticResponses = {
+  greeting: "Hey, I am TokenMind. Ask me about a token, trending tokens, or Solana stuff.",
+  thanks: "Anytime!",
+  help: "I can help with: token info (paste a Solana address), trending tokens, Twitter crypto trends, token swaps, or general Solana/dev questions.",
+  empty: "Didn't catch that — try asking about a token or what's trending.",
+}
+
+type Intent =
+  | { name: "greeting" | "thanks" | "help"; type: "text"; match: (input: string) => boolean; getText: () => string }
+  | { name: "trending_tokens"; type: "tool"; match: (input: string) => boolean; toolName: "GET_TRENDING_TOKEN"; getPayload: () => Promise<{ result: { body: { tokens: JupiterTokenData[]; prices: number[] } } }>; };
+
+  const normalize = (input: string) => input.trim().toLowerCase().replace(/[!?.]+$/, "");
+
+const intents: Intent[] = [
+  {
+    name: "greeting",
+    type: "text",
+    match: (input) => /^(hi|hii|hello|hey|yo|sup)!?$/i.test(input.trim()),
+    getText: () => staticResponses.greeting,
+  },
+  {
+    name: "thanks",
+    type: "text",
+    match: (input) => /^(thanks|thank you|thx|ok|cool|nice)!?$/i.test(input.trim()),
+    getText: () => staticResponses.thanks,
+  },
+  {
+    name: "help",
+    type: "text",
+    match: (input) => /^(help|what can you do|what do you do)\??$/i.test(input.trim()),
+    getText: () => staticResponses.help,
+  },
+  {
+    name: "trending_tokens",
+    type: "tool",
+    match: (input) => {
+      const n = normalize(input);
+      const mentionsTrend = /\btrend(ing)?\b|\btop\b|\bpopular\b|\bhot\b/.test(n);
+      const mentionsTokens = /\btokens?\b|\bcoins?\b/.test(n);
+      const wantsExplanation = /\bwhy\b|\bhow come\b|\bexplain\b|\bwhat caused\b|\breason\b/.test(n);
+      return mentionsTrend && mentionsTokens && !wantsExplanation;
+    },
+    toolName: "GET_TRENDING_TOKEN",
+    getPayload: async () => {
+      const { body } = await getTrendingTokens();
+
+      return ({ result: { body: { tokens: body.tokens, prices: body.prices } } });
+    },
+  },
+];
+
+export function matchDeterministicIntent(input: string): Intent | null {
+  const trimmed = input.trim();
+  if (!trimmed) return null;
+  return intents.find((intent) => intent.match(trimmed)) ?? null;
+}

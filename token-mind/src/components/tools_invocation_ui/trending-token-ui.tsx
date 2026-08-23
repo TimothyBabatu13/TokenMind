@@ -31,6 +31,8 @@ export const GetTrendingTokenUI = ({data, prices}: GetTrendingTokenUIProps) => {
     }
   }
 
+  console.log(data)
+
   return (
     <div className="p-4">
       <Card className="w-full">
