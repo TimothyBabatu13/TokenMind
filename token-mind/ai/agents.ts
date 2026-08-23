@@ -3,15 +3,30 @@ import { z } from "zod";
 import { getTrendingTokens } from "./agent/trending-token/agent";
 import { getTokenInfo } from "./agent/get-token-info/agent";
 import { KnowledgeAgent } from "./knowledge/agent";
+import { getCachedDataOrFetch } from "@/lib/cache";
+import { GET_TRENDING_DATA_KEY, GET_TRENDING_DATA_TTL } from "@/constants/constants";
 
 export const getTrendingTokensAgent = tool({
     description: 'Fetches a list of currently trending tokens based on market activity, such as volume, price changes, and social mentions.',
     parameters: z.object({}),
     execute : async () =>{
-        const result = await getTrendingTokens();
-        return {
-            result
-        }
+        const body = await getCachedDataOrFetch({
+            key: GET_TRENDING_DATA_KEY, 
+            ttlSeconds: GET_TRENDING_DATA_TTL, 
+            fetcher: async () => {
+                const { body } = await getTrendingTokens();
+                return body; 
+            }})
+            return {
+                result: {
+                    message: `Found ${body.prices.length} trending tokens. The user is shown the tokens, do not list them. Ask the user what they want to do with the coin.`,
+                    body: {
+                        tokens: body.tokens,
+                        prices: body.prices,
+                    }
+    
+                }
+            }
     }
     
 })

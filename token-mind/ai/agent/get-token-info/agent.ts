@@ -1,5 +1,7 @@
 import { BIRD_EYE_API_KEY } from "@/constants/api_keys";
 import { TokenDetails, TokenResponse } from "./type";
+import { getCachedDataOrFetch } from "@/lib/cache";
+import { TOKEN_INFO_TTL } from "@/constants/constants";
 
 const options = {
   method: 'GET',
@@ -22,9 +24,23 @@ export const getTokenInfo = async ({ walletAddress } :  {
     
     try {
 
-        const api = await fetch(`https://public-api.birdeye.so/defi/token_overview?address=${walletAddress}&ui_amount_mode=scaled`, options)
-        const response = await api.json() as TokenResponse
-        
+        const response = await getCachedDataOrFetch({
+            key: `token-info:${walletAddress}`,
+            ttlSeconds: TOKEN_INFO_TTL,
+            fetcher: async () => {
+                const api = await fetch(
+                    `https://public-api.birdeye.so/defi/token_overview?address=${walletAddress}&ui_amount_mode=scaled`,
+                    options
+                );
+                const result = await api.json() as TokenResponse;
+
+                if (!result.success) {
+                    throw new Error(`Birdeye returned unsuccessful response for ${walletAddress}`);
+                }
+                return result;
+            },
+        });
+
         return {
             message: 'Found Information about this token The user is shown the token, do not list it. Ask the user what they want to do with the coin.',
             body: {
