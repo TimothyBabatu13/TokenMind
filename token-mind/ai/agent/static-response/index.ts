@@ -1,5 +1,7 @@
+import { getCachedDataOrFetch } from "@/lib/cache";
 import { getTrendingTokens } from "../trending-token/agent";
 import { JupiterTokenData } from "../trending-token/type";
+import { GET_TRENDING_DATA_KEY, GET_TRENDING_DATA_TTL } from "@/constants/constants";
 
 export const staticResponses = {
   greeting: "Hey, I am TokenMind. Ask me about a token, trending tokens, or Solana stuff.",
@@ -45,9 +47,15 @@ const intents: Intent[] = [
     },
     toolName: "GET_TRENDING_TOKEN",
     getPayload: async () => {
-      const { body } = await getTrendingTokens();
-
-      return ({ result: { body: { tokens: body.tokens, prices: body.prices } } });
+        const body = await getCachedDataOrFetch({
+            key: GET_TRENDING_DATA_KEY, 
+            ttlSeconds: GET_TRENDING_DATA_TTL, 
+            fetcher: async () => {
+                const { body } = await getTrendingTokens();
+                return body; 
+        }})
+        
+        return { result: { body } };
     },
   },
 ];
