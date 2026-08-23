@@ -10,7 +10,6 @@ import { useEffect, useRef } from "react";
 import { ToolRenderer } from "./tools";
 
 
-
 const MessageText = ({ content, role } : {
     content: string,
     role: "system" | "user" | "assistant" | "data"
