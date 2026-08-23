@@ -52,7 +52,7 @@ export const getTrendingTokens = async () => {
           })
         }
         let tokensRaw = response.data.tokens;
-        
+        console.log('this place is hit')
         let tokens: JupiterTokenData[] = tokensRaw.map((token) => ({
             address: token.address,
             name: token.name,
