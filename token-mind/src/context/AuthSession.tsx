@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from "next/navigation";
 import { SessionProvider } from "next-auth/react";
 const AuthSession =  ({children } : {
     children: React.ReactNode

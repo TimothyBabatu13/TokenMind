@@ -56,7 +56,7 @@ export const POST = async (req: NextRequest) => {
 
   const matchedIntent = matchDeterministicIntent(lastMessage.content);
   if (matchedIntent) {
-    console.log("[route] matched deterministic intent:", matchedIntent.name);
+    console.log("my local intent caught this", matchedIntent.name);
     if (matchedIntent.type === "tool") {
       const payload = await matchedIntent.getPayload();
       return respondWithDirectToolResult(matchedIntent.toolName, payload);

@@ -53,8 +53,8 @@ const intents: Intent[] = [
             fetcher: async () => {
                 const { body } = await getTrendingTokens();
                 return body; 
-        }})
-        
+            }
+        })
         return { result: { body } };
     },
   },
