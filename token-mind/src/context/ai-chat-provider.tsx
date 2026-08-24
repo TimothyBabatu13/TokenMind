@@ -1,5 +1,6 @@
 "use client";
 
+import { UsageStatus, useUsage } from "@/hooks/use-chat-limit";
 import { useChat } from "@ai-sdk/react";
 import { ChatRequestOptions, CreateMessage, Message, UIMessage } from "ai";
 import { ChangeEvent, createContext, use } from "react";
@@ -13,7 +14,8 @@ interface ChatProviderProps {
     append: (message: Message | CreateMessage, chatRequestOptions?: ChatRequestOptions) => Promise<string | null | undefined>,
     error: Error | undefined,
     reload: (chatRequestOptions?: ChatRequestOptions | undefined) => Promise<string | null | undefined>,
-    setMessages: (messages: Message[] | ((messages: Message[]) => Message[])) => void
+    setMessages: (messages: Message[] | ((messages: Message[]) => Message[])) => void,
+    usage: UsageStatus | null
 }
 
 const ChatContext = createContext<ChatProviderProps | undefined>(undefined)
@@ -21,10 +23,23 @@ const ChatContext = createContext<ChatProviderProps | undefined>(undefined)
 const AiChatProvider = ({ children } : {
     children: React.ReactNode
 }) => {
-    const { messages, handleSubmit, handleInputChange, input, isLoading, append, error, reload, setMessages } = useChat({api: `/api/chat?walletAddress=${null}`})
+    const { fingerprint, usage, loading, refetch } = useUsage();
+
+    const { messages, handleSubmit, handleInputChange, input, isLoading, append, error, reload, setMessages } = useChat({
+        api: `/api/chat?walletAddress=${null}`,
+        headers: fingerprint ? { "x-fingerprint": fingerprint } : undefined,
+        onFinish: async () => {
+            if (fingerprint) {
+                await refetch()
+            }
+        },
+    })
+
+    const isProviderLoading = isLoading || loading;
+
   return (
     <ChatContext.Provider 
-        value={{messages, handleSubmit, handleInputChange, input, isLoading, append, error, reload, setMessages}}
+        value={{messages, handleSubmit, handleInputChange, input, isLoading: isProviderLoading, append, error, reload, setMessages, usage}}
     >
         {children}
     </ChatContext.Provider>

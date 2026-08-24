@@ -7,9 +7,12 @@ import { FormEvent, KeyboardEvent } from "react"
 
 const Form = () => {
     
-    const { isLoading, handleInputChange, input, handleSubmit } = useAIChatProvider()
-    const disbaledSubmit = isLoading || input.trim().length < 3
+    const { isLoading, handleInputChange, input, handleSubmit, usage } = useAIChatProvider();
+    
+    const isUsageNotValid = usage?.remaining! < 1;
 
+    const disbaledSubmit = isLoading || input.trim().length < 3 || isUsageNotValid
+    
     const handleFormSubmit = (e: FormEvent) => {
         if(disbaledSubmit) return;
         e.preventDefault();

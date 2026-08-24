@@ -6,8 +6,6 @@ import { Toaster } from "@/components/ui/sonner"
 import WalletAdapter from "@/context/wallet-adapter";
 import { ThemeProvider } from "next-themes";
 
-
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
