@@ -62,11 +62,10 @@ const TypingIndicator = () => {
 }
 
 const Messages = () => {
-    const { messages, isLoading, usage } = useAIChatProvider();
+    const { messages, isLoading } = useAIChatProvider();
     const scrollToRef = useRef<HTMLDivElement | null>(null);
     const isNearBottomRef = useRef(true);
     const containerRef = useRef<HTMLDivElement>(null);
-    const [showOnce, setShowOnce] = useState(false);
 
     const handleScroll = () => {
         const el = containerRef.current;
@@ -81,11 +80,7 @@ const Messages = () => {
         }
     }, [isLoading, messages])
 
-    useEffect(()=>{
-        if(usage?.remaining! > 0) return
-        setShowOnce(true)
-    }, [usage?.remaining])
-    
+
     if(!messages.length) return null
     return (
     <div 
@@ -97,6 +92,7 @@ const Messages = () => {
                 onScroll={handleScroll} 
                 className="flex-1 absolute pt-[10px] top-0 left-0 right-0 bottom-0 overflow-y-auto h-[68dvh] scroll-area space-y-[10px]"
             >
+                
                 {
                     messages.map(message => (
                         <div key={message.id}>

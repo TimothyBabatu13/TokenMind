@@ -47,9 +47,14 @@ const suggestedActions = [
 
 const SuggestedActions = () => {
   
-  const { append } = useAIChatProvider();
+  const { append, usage, isLoading } = useAIChatProvider();
+
+
+  const isUsageNotValid = usage?.remaining! < 1
+  const isButtonDisabled = isLoading || isUsageNotValid;
 
   const handleSuggestionClick = async (action: string) => {
+    if(isButtonDisabled) return;
     await append({role: 'user', content: action})
   }
   
@@ -69,9 +74,10 @@ const SuggestedActions = () => {
         key={suggestedAction}
       >
         <Suggestion
-          className="h-auto w-full whitespace-nowrap rounded-xl border border-border/50 bg-card/30 px-4 py-3 text-left text-[12px] leading-relaxed text-muted-foreground transition-all duration-200 sm:whitespace-normal sm:p-4 sm:text-[13px] hover:-translate-y-0.5 hover:bg-card/60 hover:text-foreground hover:shadow-[var(--shadow-card)]"
+          className="h-auto w-full whitespace-nowrap rounded-xl border border-border/50 bg-card/30 px-4 py-3 text-left text-[12px] leading-relaxed text-muted-foreground transition-all duration-200 sm:whitespace-normal sm:p-4 sm:text-[13px] hover:-translate-y-0.5 hover:bg-card/60 hover:text-foreground hover:shadow-[var(--shadow-card)]  disabled:cursor-not-allowed"
           onClick={()=>{handleSuggestionClick(suggestedAction)}}
           suggestion={suggestedAction}
+          disabled={isButtonDisabled}
         >
           {suggestedAction}
         </Suggestion>
