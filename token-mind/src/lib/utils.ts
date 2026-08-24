@@ -7,4 +7,4 @@ export function cn(...inputs: ClassValue[]) {
 
 // https://api.devnet.solana.com"
 
-export const SOLANA_RPC ="https://api.devnet.solana.com";
+export const SOLANA_RPC = "https://api.devnet.solana.com";
