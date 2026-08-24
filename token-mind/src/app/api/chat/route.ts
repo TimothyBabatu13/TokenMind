@@ -65,10 +65,7 @@ export const POST = async (req: NextRequest) => {
     const fingerprint = req.headers.get("x-fingerprint");
     const { allowed } = await checkAndIncrementUsage(ip, fingerprint, GUEST_DAILY_LIMIT);
     if (!allowed) {
-      return NextResponse.json(
-        { error: "You've reached today's guest limit. Sign in for unlimited access." },
-        { status: 429 }
-      );
+      return respondWithDirectText("You've reached today's guest limit. Sign in for unlimited access.");
     }
   }
 

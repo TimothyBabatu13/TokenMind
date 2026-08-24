@@ -6,7 +6,7 @@ import Form from "./form";
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ToolRenderer } from "./tools";
 
 
@@ -62,11 +62,12 @@ const TypingIndicator = () => {
 }
 
 const Messages = () => {
-    const { messages, isLoading } = useAIChatProvider();
+    const { messages, isLoading, usage } = useAIChatProvider();
     const scrollToRef = useRef<HTMLDivElement | null>(null);
     const isNearBottomRef = useRef(true);
     const containerRef = useRef<HTMLDivElement>(null);
-    
+    const [showOnce, setShowOnce] = useState(false);
+
     const handleScroll = () => {
         const el = containerRef.current;
         if (!el) return;
@@ -80,6 +81,11 @@ const Messages = () => {
         }
     }, [isLoading, messages])
 
+    useEffect(()=>{
+        if(usage?.remaining! > 0) return
+        setShowOnce(true)
+    }, [usage?.remaining])
+    
     if(!messages.length) return null
     return (
     <div 
