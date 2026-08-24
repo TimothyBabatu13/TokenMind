@@ -6,9 +6,8 @@ import Form from "./form";
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ToolRenderer } from "./tools";
-
 
 
 const MessageText = ({ content, role } : {
@@ -67,7 +66,7 @@ const Messages = () => {
     const scrollToRef = useRef<HTMLDivElement | null>(null);
     const isNearBottomRef = useRef(true);
     const containerRef = useRef<HTMLDivElement>(null);
-    
+
     const handleScroll = () => {
         const el = containerRef.current;
         if (!el) return;
@@ -81,6 +80,7 @@ const Messages = () => {
         }
     }, [isLoading, messages])
 
+
     if(!messages.length) return null
     return (
     <div 
@@ -92,6 +92,7 @@ const Messages = () => {
                 onScroll={handleScroll} 
                 className="flex-1 absolute pt-[10px] top-0 left-0 right-0 bottom-0 overflow-y-auto h-[68dvh] scroll-area space-y-[10px]"
             >
+                
                 {
                     messages.map(message => (
                         <div key={message.id}>
