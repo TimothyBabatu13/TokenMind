@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
   if (token) {
-    return NextResponse.json({ unlimited: true, remaining: null });
+    return NextResponse.json({ unlimited: true, remaining: 5 });
   }
 
   const ip = getClientIp(req);
