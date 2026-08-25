@@ -1,14 +1,14 @@
 export const runtime = "edge";
 
 import { NextRequest, NextResponse } from "next/server";
-import { getToken } from "next-auth/jwt";
 import { getClientIp } from "@/lib/get-client-ip";
 import { peekUsage } from "@/lib/rate-limit";
 import { GUEST_DAILY_LIMIT } from "@/constants/constants";
+import { getAuthToken } from "@/lib/get-auth-token";
 
 
 export async function GET(req: NextRequest) {
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const token = await getAuthToken(req);
 
   if (token) {
     return NextResponse.json({ unlimited: true, remaining: GUEST_DAILY_LIMIT });
