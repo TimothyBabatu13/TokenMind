@@ -1,6 +1,7 @@
 "use client";
 
 import { UsageStatus, useUsage } from "@/hooks/use-chat-limit";
+import { useHandleSession } from "@/hooks/useHandleSession";
 import { useChat } from "@ai-sdk/react";
 import { ChatRequestOptions, CreateMessage, Message, UIMessage } from "ai";
 import { ChangeEvent, createContext, use } from "react";
@@ -15,7 +16,9 @@ interface ChatProviderProps {
     error: Error | undefined,
     reload: (chatRequestOptions?: ChatRequestOptions | undefined) => Promise<string | null | undefined>,
     setMessages: (messages: Message[] | ((messages: Message[]) => Message[])) => void,
-    usage: UsageStatus | null
+    usage: UsageStatus | null,
+    startNewChat: () => void,
+    sessionId: string
 }
 
 const ChatContext = createContext<ChatProviderProps | undefined>(undefined)
@@ -24,9 +27,11 @@ const AiChatProvider = ({ children } : {
     children: React.ReactNode
 }) => {
     const { fingerprint, usage, loading, refetch } = useUsage();
+    
+    const { sessionId, startNewChat: clearChat } = useHandleSession();
 
     const { messages, handleSubmit, handleInputChange, input, isLoading, append, error, reload, setMessages } = useChat({
-        api: `/api/chat?walletAddress=${null}`,
+        api: `/api/chat?walletAddress=${null}&sessionId=${sessionId}`,
         headers: fingerprint ? { "x-fingerprint": fingerprint } : undefined,
         onFinish: async () => {
             if (fingerprint) {
@@ -34,12 +39,14 @@ const AiChatProvider = ({ children } : {
             }
         },
     })
+    
+    const startNewChat = () => clearChat(()=> setMessages([]));
 
     const isProviderLoading = isLoading || loading;
 
   return (
     <ChatContext.Provider 
-        value={{messages, handleSubmit, handleInputChange, input, isLoading: isProviderLoading, append, error, reload, setMessages, usage}}
+        value={{messages, handleSubmit, handleInputChange, input, isLoading: isProviderLoading, append, error, reload, setMessages, usage, sessionId, startNewChat}}
     >
         {children}
     </ChatContext.Provider>

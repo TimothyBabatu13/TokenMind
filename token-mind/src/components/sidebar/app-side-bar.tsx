@@ -35,7 +35,7 @@ import { useAIChatProvider } from "@/context/ai-chat-provider";
 export function AppSidebar() {
   const router = useRouter();
   const { setOpenMobile, toggleSidebar } = useSidebar();
-  const { setMessages } = useAIChatProvider()
+  const { startNewChat } = useAIChatProvider()
   const [showDeleteAllDialog, setShowDeleteAllDialog] = useState(false);
 
   const closeMobile = useCallback(() => {
@@ -101,7 +101,7 @@ export function AppSidebar() {
                   <SidebarMenuButton
                     className="h-8 rounded-lg border border-sidebar-border text-[13px] text-sidebar-foreground/70 transition-colors duration-150 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
                     onClick={()=>{
-                      setMessages([])
+                      startNewChat();
                     }}
                     tooltip="New Chat"
                   >
