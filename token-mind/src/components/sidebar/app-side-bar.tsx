@@ -30,12 +30,13 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "../ui/alert-dialog";
 import SidebarUserNav from "./side-bar-nav";
 import { useAIChatProvider } from "@/context/ai-chat-provider";
+import { Skeleton } from "../ui/skeleton";
 
 
 export function AppSidebar() {
   const router = useRouter();
   const { setOpenMobile, toggleSidebar } = useSidebar();
-  const { startNewChat } = useAIChatProvider()
+  const { startNewChat, sessions, sessionId, isSessionLoading, handleSetSessionId } = useAIChatProvider()
   const [showDeleteAllDialog, setShowDeleteAllDialog] = useState(false);
 
   const closeMobile = useCallback(() => {
@@ -56,6 +57,10 @@ export function AppSidebar() {
 
     toast.success("All chats deleted");
   }, [router]);
+
+  const loadSession = (sessionId: string) => {
+    handleSetSessionId(sessionId)
+  }
 
   return (
     <>
@@ -109,6 +114,54 @@ export function AppSidebar() {
                     <span className="font-medium">New chat</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
+                
+                {isSessionLoading &&
+                Array.from({ length: 4 }).map((_, i) => (
+                <SidebarMenuItem key={i}>
+                  <div className="flex items-center gap-2 px-2 h-8">
+                    <Skeleton className="size-4 rounded-full shrink-0" />
+                    <Skeleton className="h-4 flex-1 rounded" />
+                  </div>
+                </SidebarMenuItem>
+              ))}
+
+                {
+                  sessions?.length === 0 && (
+                  <div className="px-3 py-2 text-[13px] text-sidebar-foreground/40">
+                    No chats yet
+                  </div>
+                )}
+                
+                {sessions?.map((session) => (
+                  <SidebarMenuItem key={session.id} className="group/item">
+                    <SidebarMenuButton
+                      className={`h-8 rounded-lg text-[13px] transition-colors duration-150 ${
+                        session.id === sessionId
+                        ? "bg-sidebar-accent text-sidebar-foreground"
+                        : "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+                      }`}
+                      onClick={() => loadSession(session.id)}
+                      tooltip={session.title ?? "Untitled chat"}
+                    >
+                      <MessageSquareIcon className="size-4 shrink-0" />
+                      <span className="truncate font-medium">
+                        {session.title ?? "Untitled chat"}
+                      </span>
+                    </SidebarMenuButton>
+                    
+                    <button
+                      className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover/item:opacity-100 rounded p-1 text-sidebar-foreground/40 transition-opacity duration-150 hover:bg-destructive/10 hover:text-destructive group-data-[collapsible=icon]:hidden"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // setSessionToDelete(session.id);
+                      }}
+                      aria-label="Delete chat"
+                    >
+                      <TrashIcon className="size-3.5" />
+                    </button>
+                  </SidebarMenuItem>
+                ))}
+                
                 { (
                   <SidebarMenuItem>
                     <SidebarMenuButton

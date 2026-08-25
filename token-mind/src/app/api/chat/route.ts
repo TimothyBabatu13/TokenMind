@@ -1,15 +1,16 @@
-export const runtime = "edge";
+// export const runtime = "edge";
 
 import { streamText, convertToCoreMessages, type Message } from "ai";
-import { NextRequest, NextResponse } from "next/server";
+import { after, NextRequest, NextResponse } from "next/server";
 import { model } from "@/lib/model";
 import { agents } from "../../../../ai/agent/agent";
 import { matchDeterministicIntent } from "../../../../ai/agent/static-response";
 import { respondWithDirectText, respondWithDirectToolResult } from "@/lib/direct-tool-response";
-import { getToken } from "next-auth/jwt";
 import { getClientIp } from "@/lib/get-client-ip";
 import { checkAndIncrementUsage } from "@/lib/rate-limit";
 import { GUEST_DAILY_LIMIT } from "@/constants/constants";
+import prisma from "@/lib/prisma";
+import { getAuthToken, getSessionId } from "@/lib/get-auth-token";
 
 const systemPrompt = `You are TokenMind — an intelligent assistant with access to specialized tools. Each tool below has a name and purpose. Use the tool that clearly matches the user's request; do not guess or combine tools.
 
@@ -58,7 +59,7 @@ export const POST = async (req: NextRequest) => {
     );
   }
   
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const token = await getAuthToken(req);
   
   if (!token) {
     const ip = getClientIp(req);
@@ -68,6 +69,36 @@ export const POST = async (req: NextRequest) => {
       return respondWithDirectText("You've reached today's guest limit. Sign in for unlimited access.");
     }
   }
+
+  const sessionId = getSessionId(req)
+  
+  if (token && sessionId) {
+    after(async () => {
+      try {
+        
+        await prisma.chatSession.upsert({
+          where: { id: sessionId },
+          update: { updatedAt: new Date() },
+          create: {
+            id: sessionId,
+            userId: token.sub!,
+            title: lastMessage.content.slice(0, 60),
+          },
+        });
+        
+        await prisma.message.create({
+          data: {
+            sessionId,
+            role: "user",
+            content: lastMessage.content,
+          },
+        });
+      } catch (err) {
+        console.error("[db] failed to save session/message:", err);
+      }
+    });
+  }
+
 
   const matchedIntent = matchDeterministicIntent(lastMessage.content);
   if (matchedIntent) {
@@ -80,6 +111,7 @@ export const POST = async (req: NextRequest) => {
   }
 
   const rawWalletAddress = req.nextUrl.searchParams.get("walletAddress");
+  
   const walletAddress =
     rawWalletAddress && isValidSolanaAddress(rawWalletAddress) ? rawWalletAddress : null;
 

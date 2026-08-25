@@ -1,6 +1,8 @@
 "use client";
 
 import { UsageStatus, useUsage } from "@/hooks/use-chat-limit";
+import { useChatMessages } from "@/hooks/use-messages";
+import { ChatSession, useChatSessions } from "@/hooks/use-sessions";
 import { useHandleSession } from "@/hooks/useHandleSession";
 import { useChat } from "@ai-sdk/react";
 import { ChatRequestOptions, CreateMessage, Message, UIMessage } from "ai";
@@ -18,7 +20,10 @@ interface ChatProviderProps {
     setMessages: (messages: Message[] | ((messages: Message[]) => Message[])) => void,
     usage: UsageStatus | null,
     startNewChat: () => void,
-    sessionId: string
+    sessionId: string,
+    sessions: ChatSession[] | null,
+    isSessionLoading: boolean,
+    handleSetSessionId: (id: string) => void
 }
 
 const ChatContext = createContext<ChatProviderProps | undefined>(undefined)
@@ -28,7 +33,8 @@ const AiChatProvider = ({ children } : {
 }) => {
     const { fingerprint, usage, loading, refetch } = useUsage();
     
-    const { sessionId, startNewChat: clearChat } = useHandleSession();
+    const { sessionId, startNewChat: clearChat, handleSetSessionId } = useHandleSession();
+    const { sessions, loading:isSessionLoading } = useChatSessions();
 
     const { messages, handleSubmit, handleInputChange, input, isLoading, append, error, reload, setMessages } = useChat({
         api: `/api/chat?walletAddress=${null}&sessionId=${sessionId}`,
@@ -39,14 +45,16 @@ const AiChatProvider = ({ children } : {
             }
         },
     })
-    
+
+    const { messages: chatMessages } = useChatMessages(sessionId);
+
     const startNewChat = () => clearChat(()=> setMessages([]));
 
     const isProviderLoading = isLoading || loading;
 
   return (
     <ChatContext.Provider 
-        value={{messages, handleSubmit, handleInputChange, input, isLoading: isProviderLoading, append, error, reload, setMessages, usage, sessionId, startNewChat}}
+        value={{messages, handleSubmit, handleInputChange, input, isLoading: isProviderLoading, append, error, reload, setMessages, usage, sessionId, startNewChat, isSessionLoading, sessions, handleSetSessionId}}
     >
         {children}
     </ChatContext.Provider>

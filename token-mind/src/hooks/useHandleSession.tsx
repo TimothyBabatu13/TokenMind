@@ -4,7 +4,8 @@ import { useState } from "react";
 
 interface HandleSession {
   sessionId: string,
-  startNewChat: (clearMessages: () => void) => void
+  startNewChat: (clearMessages: () => void) => void,
+  handleSetSessionId: (id: string) => void
 }
 
 export function useHandleSession(): HandleSession {
@@ -15,5 +16,8 @@ export function useHandleSession(): HandleSession {
     clearMessages();
   };
 
-  return { sessionId, startNewChat };
+  const handleSetSessionId = (id: string) => {
+    setSessionId(id)
+  }
+  return { sessionId, startNewChat, handleSetSessionId };
 }
