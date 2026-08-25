@@ -6,6 +6,7 @@ import { ChatSession, useChatSessions } from "@/hooks/use-sessions";
 import { useHandleSession } from "@/hooks/useHandleSession";
 import { useChat } from "@ai-sdk/react";
 import { ChatRequestOptions, CreateMessage, Message, UIMessage } from "ai";
+import { useSession } from "next-auth/react";
 import { ChangeEvent, createContext, use, useEffect, useRef } from "react";
 
 interface ChatProviderProps {
@@ -32,9 +33,16 @@ const AiChatProvider = ({ children } : {
     children: React.ReactNode
 }) => {
     const { fingerprint, usage, loading, refetch } = useUsage();
+    const { status } = useSession();
     
     const { sessionId, startNewChat: clearChat, handleSetSessionId } = useHandleSession();
-    const { sessions, loading:isSessionLoading } = useChatSessions();
+    const { sessions, loading:isSessionLoading, refetch: refetchSessions } = useChatSessions();
+    const sessionIdRef = useRef(sessionId);
+    const refetchSessionsRef = useRef(refetchSessions);
+    const authStatusRef = useRef(status);
+    sessionIdRef.current = sessionId;
+    refetchSessionsRef.current = refetchSessions;
+    authStatusRef.current = status;
 
     const { messages, handleSubmit, handleInputChange, input, isLoading, append, error, reload, setMessages } = useChat({
         id: sessionId,
@@ -44,6 +52,14 @@ const AiChatProvider = ({ children } : {
             if (fingerprint) {
                 await refetch()
             }
+
+            if (authStatusRef.current !== "authenticated") return;
+
+            const list = await refetchSessionsRef.current();
+            if (list.some((session) => session.id === sessionIdRef.current)) return;
+
+            await new Promise((resolve) => setTimeout(resolve, 600));
+            await refetchSessionsRef.current();
         },
     })
 
