@@ -14,8 +14,8 @@ type SuggestedAction = {
 const suggestedActions: SuggestedAction[] = [
   { text: "What's trending on Solana right now?", intent: "trending_tokens" },
   { text: "How does staking work on Solana?" },
-  { text: "Tell me about this token" },
-  { text: "What's trending on crypto Twitter today?" },
+  // { text: "Tell me about this token" },
+  // { text: "What's trending on crypto Twitter today?" },
 ];
 
  export type SuggestionProps = Omit<ComponentProps<typeof Button>, "onClick"> & {
