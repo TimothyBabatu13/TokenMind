@@ -20,7 +20,7 @@ import {
 
 const SidebarUserNav = () => {
   const router = useRouter();
-  const { setTheme, resolvedTheme, themes } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
 
     
   const handleThemeSelect = useCallback(() => {
