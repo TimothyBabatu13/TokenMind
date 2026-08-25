@@ -6,7 +6,7 @@ import { ChatSession, useChatSessions } from "@/hooks/use-sessions";
 import { useHandleSession } from "@/hooks/useHandleSession";
 import { useChat } from "@ai-sdk/react";
 import { ChatRequestOptions, CreateMessage, Message, UIMessage } from "ai";
-import { ChangeEvent, createContext, use } from "react";
+import { ChangeEvent, createContext, use, useEffect, useRef } from "react";
 
 interface ChatProviderProps {
     messages: UIMessage[],
@@ -37,6 +37,7 @@ const AiChatProvider = ({ children } : {
     const { sessions, loading:isSessionLoading } = useChatSessions();
 
     const { messages, handleSubmit, handleInputChange, input, isLoading, append, error, reload, setMessages } = useChat({
+        id: sessionId,
         api: `/api/chat?walletAddress=${null}&sessionId=${sessionId}`,
         headers: fingerprint ? { "x-fingerprint": fingerprint } : undefined,
         onFinish: async () => {
@@ -46,17 +47,23 @@ const AiChatProvider = ({ children } : {
         },
     })
 
+    const { messages: dbMessages, loading: isDbMessagesLoading } = useChatMessages(sessionId);
+    const hydratedSessionIdRef = useRef<string | null>(null);
+
+    useEffect(() => {
+        if (isDbMessagesLoading || dbMessages === null) return;
+        if (hydratedSessionIdRef.current === sessionId) return;
+        hydratedSessionIdRef.current = sessionId;
+        setMessages(dbMessages);
+    }, [sessionId, isDbMessagesLoading, dbMessages, setMessages]);
     
-    const { messages: chatMessages } = useChatMessages(sessionId);
-    
-    const newMessages = [...(chatMessages || []), ...messages] as unknown as UIMessage[]
     const startNewChat = () => clearChat(()=> setMessages([]));
 
     const isProviderLoading = isLoading || loading;
 
   return (
     <ChatContext.Provider 
-        value={{messages: newMessages, handleSubmit, handleInputChange, input, isLoading: isProviderLoading, append, error, reload, setMessages, usage, sessionId, startNewChat, isSessionLoading, sessions, handleSetSessionId}}
+        value={{messages, handleSubmit, handleInputChange, input, isLoading: isProviderLoading, append, error, reload, setMessages, usage, sessionId, startNewChat, isSessionLoading, sessions, handleSetSessionId}}
     >
         {children}
     </ChatContext.Provider>
