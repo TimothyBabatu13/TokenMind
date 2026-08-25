@@ -66,26 +66,35 @@ export function buildToolAssistantMessage(
   };
 }
 
-export function toUIMessages(
-  rows: Array<{
-    id: string;
-    role: string;
-    content: string;
-    parts: unknown;
-    attachments?: unknown;
-    createdAt: Date | string;
-  }>
-): Message[] {
-  return rows.map((row) => ({
-    id: row.id,
-    role: row.role as Message["role"],
-    content: row.content,
-    createdAt: row.createdAt instanceof Date ? row.createdAt : new Date(row.createdAt),
-    parts: (Array.isArray(row.parts)
-      ? row.parts
-      : [{ type: "text", text: row.content }]) as UIMessage["parts"],
-    experimental_attachments: Array.isArray(row.attachments) ? row.attachments : [],
-  }));
+type MessageRow = {
+  id: unknown;
+  role: unknown;
+  content: unknown;
+  parts: unknown;
+  attachments?: unknown;
+  createdAt: unknown;
+};
+
+export function toUIMessages(rows: MessageRow[]): Message[] {
+  return rows.map((row) => {
+    const id = String(row.id);
+    const content = typeof row.content === "string" ? row.content : "";
+    const createdAt =
+      row.createdAt instanceof Date
+        ? row.createdAt
+        : new Date(typeof row.createdAt === "string" ? row.createdAt : Date.now());
+
+    return {
+      id,
+      role: (typeof row.role === "string" ? row.role : "assistant") as Message["role"],
+      content,
+      createdAt,
+      parts: (Array.isArray(row.parts)
+        ? row.parts
+        : [{ type: "text", text: content }]) as UIMessage["parts"],
+      experimental_attachments: Array.isArray(row.attachments) ? row.attachments : [],
+    };
+  });
 }
 
 export async function persistChatMessages(opts: {
