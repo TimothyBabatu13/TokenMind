@@ -6,7 +6,7 @@ import Form from "./form";
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { ToolRenderer } from "./tools";
 
 
