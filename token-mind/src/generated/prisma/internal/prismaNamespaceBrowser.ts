@@ -100,6 +100,7 @@ export const MessageScalarFieldEnum = {
   role: 'role',
   content: 'content',
   parts: 'parts',
+  attachments: 'attachments',
   createdAt: 'createdAt'
 } as const
 
@@ -114,12 +115,11 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
-export const NullableJsonNullValueInput = {
-  DbNull: DbNull,
+export const JsonNullValueInput = {
   JsonNull: JsonNull
 } as const
 
-export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {

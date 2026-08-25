@@ -1,15 +1,27 @@
-export const runtime = "edge";
+// export const runtime = "edge";
 
-import { streamText, convertToCoreMessages, type Message } from "ai";
-import { NextRequest, NextResponse } from "next/server";
+import {
+  appendResponseMessages,
+  streamText,
+  convertToCoreMessages,
+  generateId,
+  type Message,
+} from "ai";
+import { after, NextRequest, NextResponse } from "next/server";
 import { model } from "@/lib/model";
 import { agents } from "../../../../ai/agent/agent";
 import { matchDeterministicIntent } from "../../../../ai/agent/static-response";
 import { respondWithDirectText, respondWithDirectToolResult } from "@/lib/direct-tool-response";
-import { getToken } from "next-auth/jwt";
 import { getClientIp } from "@/lib/get-client-ip";
 import { checkAndIncrementUsage } from "@/lib/rate-limit";
 import { GUEST_DAILY_LIMIT } from "@/constants/constants";
+import { getAuthToken, getSessionId } from "@/lib/get-auth-token";
+import {
+  buildTextAssistantMessage,
+  buildToolAssistantMessage,
+  persistChatMessages,
+  textFromMessage,
+} from "@/lib/chat-messages";
 
 const systemPrompt = `You are TokenMind — an intelligent assistant with access to specialized tools. Each tool below has a name and purpose. Use the tool that clearly matches the user's request; do not guess or combine tools.
 
@@ -51,15 +63,16 @@ export const POST = async (req: NextRequest) => {
   }
 
   const lastMessage = messages[messages.length - 1];
-  if (!lastMessage || typeof lastMessage.content !== "string" || !lastMessage.content.trim()) {
+  const lastMessageText = lastMessage ? textFromMessage(lastMessage) : "";
+  if (!lastMessage || !lastMessageText.trim()) {
     return NextResponse.json(
       { error: "The last message must have non-empty text content." },
       { status: 400 }
     );
   }
-  
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  
+
+  const token = await getAuthToken(req);
+
   if (!token) {
     const ip = getClientIp(req);
     const fingerprint = req.headers.get("x-fingerprint");
@@ -69,17 +82,51 @@ export const POST = async (req: NextRequest) => {
     }
   }
 
-  const matchedIntent = matchDeterministicIntent(lastMessage.content);
+  const sessionId = getSessionId(req);
+  const userId = token?.sub;
+  const canPersist = Boolean(userId && sessionId);
+  const userMessage: Message = {
+    ...lastMessage,
+    id: lastMessage.id || generateId(),
+    role: "user",
+    content: lastMessageText,
+  };
+
+  const persist = (toSave: Message[]) => {
+    if (!canPersist || !userId || !sessionId) return;
+    after(async () => {
+      try {
+        await persistChatMessages({
+          sessionId,
+          userId,
+          title: lastMessageText,
+          messages: toSave,
+        });
+      } catch (err) {
+        console.error("[db] failed to save session/message:", err);
+      }
+    });
+  };
+
+  const matchedIntent = matchDeterministicIntent(lastMessageText);
   if (matchedIntent) {
     console.log("my local intent caught this", matchedIntent.name);
     if (matchedIntent.type === "tool") {
       const payload = await matchedIntent.getPayload();
-      return respondWithDirectToolResult(matchedIntent.toolName, payload);
+      const toolCallId = crypto.randomUUID();
+      persist([
+        userMessage,
+        buildToolAssistantMessage(matchedIntent.toolName, payload, toolCallId),
+      ]);
+      return respondWithDirectToolResult(matchedIntent.toolName, payload, toolCallId);
     }
-    return respondWithDirectText(matchedIntent.getText());
+    const text = matchedIntent.getText();
+    persist([userMessage, buildTextAssistantMessage(text)]);
+    return respondWithDirectText(text);
   }
 
   const rawWalletAddress = req.nextUrl.searchParams.get("walletAddress");
+
   const walletAddress =
     rawWalletAddress && isValidSolanaAddress(rawWalletAddress) ? rawWalletAddress : null;
 
@@ -106,6 +153,24 @@ export const POST = async (req: NextRequest) => {
       onStepFinish: ({ toolCalls }) => {
         if (toolCalls?.length) {
           console.log("[route] tool(s) used:", toolCalls.map(t => t.toolName));
+        }
+      },
+      onFinish: async ({ response }) => {
+        if (!canPersist || !userId || !sessionId) return;
+        try {
+          const merged = appendResponseMessages({
+            messages,
+            responseMessages: response.messages,
+          });
+          const assistantMessages = merged.slice(messages.length);
+          await persistChatMessages({
+            sessionId,
+            userId,
+            title: lastMessageText,
+            messages: [userMessage, ...assistantMessages],
+          });
+        } catch (err) {
+          console.error("[db] failed to save assistant message:", err);
         }
       },
       onError: ({ error }) => {

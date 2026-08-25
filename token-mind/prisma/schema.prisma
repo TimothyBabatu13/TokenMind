@@ -34,13 +34,14 @@ model ChatSession {
 }
 
 model Message {
-  id        String      @id @default(cuid())
-  sessionId String
-  session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  role      String      
-  content   String      @db.Text
-  parts     Json?       
-  createdAt DateTime    @default(now())
+  id          String      @id
+  sessionId   String
+  session     ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  role        String
+  content     String      @db.Text
+  parts       Json
+  attachments Json        @default("[]")
+  createdAt   DateTime    @default(now())
 
-  @@index([sessionId])
+  @@index([sessionId, createdAt])
 }
