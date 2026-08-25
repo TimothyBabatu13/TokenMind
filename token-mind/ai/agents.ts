@@ -32,13 +32,27 @@ export const getTrendingTokensAgent = tool({
 })
 
 export const getKnowledgeAgent = tool({
-    description: 'A knowledgeable assistant that provides information about about solana protocols, documentation, concepts and tools. Provide concise, accurate information with a well-structured response',
+    description: 'A knowledgeable assistant that provides information about Solana protocols, documentation, concepts and tools. Provide concise, accurate information with a well-structured response. Pass the user question as "info" (or "topic").',
     parameters: z.object({
-        info: z.string().describe('A short sentence or question asking for specific information about Solana blockchain protocols, developer tools, documentation, or key concepts.')
+        info: z.string().optional().describe('The user question or topic about Solana blockchain protocols, developer tools, documentation, or key concepts.'),
+        topic: z.string().optional().describe('Alias for info. The user question or topic about Solana.'),
+        query: z.string().optional().describe('Alias for info. The user question or topic about Solana.'),
     }),
-    execute: async ({ info }) => {
-        const res = await KnowledgeAgent(info)
-        return {res, invo: 'knowledge'};
+    execute: async ({ info, topic, query }) => {
+        const question = info?.trim() || topic?.trim() || query?.trim();
+        if (!question) {
+            return {
+                res: {
+                    message: "A Solana question is required.",
+                    body: {
+                        information: "Please ask a specific question about Solana.",
+                        links: [],
+                    },
+                },
+            };
+        }
+        const res = await KnowledgeAgent(question);
+        return { res };
     }
 })
 

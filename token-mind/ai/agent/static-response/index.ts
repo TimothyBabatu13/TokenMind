@@ -14,6 +14,8 @@ type Intent =
   | { name: "greeting" | "thanks" | "help"; type: "text"; match: (input: string) => boolean; getText: () => string }
   | { name: "trending_tokens"; type: "tool"; match: (input: string) => boolean; toolName: "GET_TRENDING_TOKEN"; getPayload: () => Promise<{ result: { body: { tokens: JupiterTokenData[]; prices: number[] } } }>; };
 
+export type DeterministicIntentName = Intent["name"];
+
   const normalize = (input: string) => input.trim().toLowerCase().replace(/[!?.]+$/, "");
 
 const intents: Intent[] = [
@@ -41,9 +43,9 @@ const intents: Intent[] = [
     match: (input) => {
       const n = normalize(input);
       const mentionsTrend = /\btrend(ing)?\b|\btop\b|\bpopular\b|\bhot\b/.test(n);
-      const mentionsTokens = /\btokens?\b|\bcoins?\b/.test(n);
+      const mentionsMarket = /\btokens?\b|\bcoins?\b|\bsolana\b/.test(n);
       const wantsExplanation = /\bwhy\b|\bhow come\b|\bexplain\b|\bwhat caused\b|\breason\b/.test(n);
-      return mentionsTrend && mentionsTokens && !wantsExplanation;
+      return mentionsTrend && mentionsMarket && !wantsExplanation;
     },
     toolName: "GET_TRENDING_TOKEN",
     getPayload: async () => {
@@ -64,4 +66,19 @@ export function matchDeterministicIntent(input: string): Intent | null {
   const trimmed = input.trim();
   if (!trimmed) return null;
   return intents.find((intent) => intent.match(trimmed)) ?? null;
+}
+
+export function getDeterministicIntent(name: string): Intent | null {
+  return intents.find((intent) => intent.name === name) ?? null;
+}
+
+export function resolveDeterministicIntent(
+  input: string,
+  intentName?: string | null
+): Intent | null {
+  if (intentName) {
+    const named = getDeterministicIntent(intentName);
+    if (named) return named;
+  }
+  return matchDeterministicIntent(input);
 }

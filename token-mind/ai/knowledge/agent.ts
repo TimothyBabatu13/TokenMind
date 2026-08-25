@@ -10,13 +10,6 @@ const schema = z.object({
    })).describe('Relevant links that were embedded in the information text')
 
 }) 
-// FORMAT YOUR RESPONSE AS FOLLOWS:
-// - Start with a short introductory paragraph (2-3 sentences) explaining the main concept
-// - Use bullet points or numbered lists for features, components, or steps
-// - Break information into short, digestible sections with clear headings when appropriate
-// - Avoid long paragraphs of text -  keep text blocks short and focused
-// Keep your responses brief and focus on the most important information. Aim for 3-4 short section maximum.
-// Include technical details when relevant, but avoid unncessary verbosity.
 
 export const knowledgeAIsystemPrompt = `You are a knowledgeable assistant that provides information about about solana protocols, documentation, concepts and tools. Provide concise, accurate information with a well-structured response. Be direct and to the point.
 - Use markdown formatting for emphasis and structure
@@ -40,6 +33,7 @@ export const KnowledgeAgent = async (args: string) => {
                 }
             ],
         })
+        console.log(object)
         const response = object as SchemaType
         return{
             message: `Here is information about ${args} on SOLANA`,
