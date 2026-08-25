@@ -10,7 +10,7 @@ import {
 import { after, NextRequest, NextResponse } from "next/server";
 import { model } from "@/lib/model";
 import { agents } from "../../../../ai/agent/agent";
-import { matchDeterministicIntent } from "../../../../ai/agent/static-response";
+import { resolveDeterministicIntent } from "../../../../ai/agent/static-response";
 import { respondWithDirectText, respondWithDirectToolResult } from "@/lib/direct-tool-response";
 import { getClientIp } from "@/lib/get-client-ip";
 import { checkAndIncrementUsage } from "@/lib/rate-limit";
@@ -47,10 +47,12 @@ const allTools = Object.fromEntries(agents.map(a => [a.name, a.tools]));
 
 export const POST = async (req: NextRequest) => {
   let messages: Message[];
+  let intentName: string | null = null;
 
   try {
     const body = await req.json();
     messages = body?.messages;
+    intentName = typeof body?.intent === "string" ? body.intent : null;
   } catch {
     return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
   }
@@ -108,7 +110,7 @@ export const POST = async (req: NextRequest) => {
     });
   };
 
-  const matchedIntent = matchDeterministicIntent(lastMessageText);
+  const matchedIntent = resolveDeterministicIntent(lastMessageText, intentName);
   if (matchedIntent) {
     console.log("my local intent caught this", matchedIntent.name);
     if (matchedIntent.type === "tool") {

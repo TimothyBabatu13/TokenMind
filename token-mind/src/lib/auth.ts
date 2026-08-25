@@ -1,8 +1,6 @@
 import type { AuthOptions } from "next-auth";
 import Google from "next-auth/providers/google";
 import prisma from "./prisma";
-import { getToken } from "next-auth/jwt";
-import { NextRequest } from "next/server";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -36,8 +34,3 @@ export const authOptions: AuthOptions = {
     },
   },
 };
-
-export const getAuthToken = async (req: NextRequest) => {
-  const authToken = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  return authToken
-}

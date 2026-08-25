@@ -42,6 +42,7 @@ const Form = () => {
             <Textarea 
                 className="bg-transparent! border-0 min-h-[96px]! max-h-[96px]! resize-none focus-visible:ring-0! w-full scroll-area"
                 onChange={handleInputChange}
+                value={input}
                 onKeyDown={handleKeyDown}
             />
 

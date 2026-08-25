@@ -6,11 +6,16 @@ import { Button } from "../ui/button";
 import Form from "./form";
 import { useAIChatProvider } from "@/context/ai-chat-provider";
 
-const suggestedActions = [
-  "What's trending on Solana right now?",
-  "How does staking work on Solana?",
-  "Tell me about this token",
-  "What's trending on crypto Twitter today?"
+type SuggestedAction = {
+  text: string;
+  intent?: "trending_tokens";
+};
+
+const suggestedActions: SuggestedAction[] = [
+  { text: "What's trending on Solana right now?", intent: "trending_tokens" },
+  { text: "How does staking work on Solana?" },
+  // { text: "Tell me about this token" },
+  // { text: "What's trending on crypto Twitter today?" },
 ];
 
  export type SuggestionProps = Omit<ComponentProps<typeof Button>, "onClick"> & {
@@ -53,9 +58,12 @@ const SuggestedActions = () => {
   const isUsageNotValid = usage?.remaining! < 1
   const isButtonDisabled = isLoading || isUsageNotValid;
 
-  const handleSuggestionClick = async (action: string) => {
+  const handleSuggestionClick = async (action: SuggestedAction) => {
     if(isButtonDisabled) return;
-    await append({role: 'user', content: action})
+    await append(
+      { role: "user", content: action.text },
+      action.intent ? { body: { intent: action.intent } } : undefined
+    );
   }
   
   return(
@@ -68,18 +76,18 @@ const SuggestedActions = () => {
       WebkitOverflowScrolling: "touch",
     }}
   >
-    {suggestedActions.map((suggestedAction, index) => (
+    {suggestedActions.map((suggestedAction) => (
       <div
         className="min-w-[200px] shrink-0 sm:min-w-0 sm:shrink"
-        key={suggestedAction}
+        key={suggestedAction.text}
       >
         <Suggestion
           className="h-auto w-full whitespace-nowrap rounded-xl border border-border/50 bg-card/30 px-4 py-3 text-left text-[12px] leading-relaxed text-muted-foreground transition-all duration-200 sm:whitespace-normal sm:p-4 sm:text-[13px] hover:-translate-y-0.5 hover:bg-card/60 hover:text-foreground hover:shadow-[var(--shadow-card)]  disabled:cursor-not-allowed"
           onClick={()=>{handleSuggestionClick(suggestedAction)}}
-          suggestion={suggestedAction}
+          suggestion={suggestedAction.text}
           disabled={isButtonDisabled}
         >
-          {suggestedAction}
+          {suggestedAction.text}
         </Suggestion>
         </div>
       ))}
