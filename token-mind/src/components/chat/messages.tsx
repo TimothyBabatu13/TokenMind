@@ -97,7 +97,7 @@ const Messages = () => {
                     messages.map(message => (
                         <div key={message.id}>
                             {
-                                message.parts.map((part) => {
+                                message?.parts?.map((part) => {
                                     switch (part.type){
                                         case "text":
                                             return (

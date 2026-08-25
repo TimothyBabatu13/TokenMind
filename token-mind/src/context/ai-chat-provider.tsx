@@ -46,15 +46,17 @@ const AiChatProvider = ({ children } : {
         },
     })
 
+    
     const { messages: chatMessages } = useChatMessages(sessionId);
-
+    
+    const newMessages = [...(chatMessages || []), ...messages] as unknown as UIMessage[]
     const startNewChat = () => clearChat(()=> setMessages([]));
 
     const isProviderLoading = isLoading || loading;
 
   return (
     <ChatContext.Provider 
-        value={{messages, handleSubmit, handleInputChange, input, isLoading: isProviderLoading, append, error, reload, setMessages, usage, sessionId, startNewChat, isSessionLoading, sessions, handleSetSessionId}}
+        value={{messages: newMessages, handleSubmit, handleInputChange, input, isLoading: isProviderLoading, append, error, reload, setMessages, usage, sessionId, startNewChat, isSessionLoading, sessions, handleSetSessionId}}
     >
         {children}
     </ChatContext.Provider>
