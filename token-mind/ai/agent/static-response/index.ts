@@ -1,7 +1,4 @@
-import { getCachedDataOrFetch } from "@/lib/cache";
-import { getTrendingTokens } from "../trending-token/agent";
-import { JupiterTokenData } from "../trending-token/type";
-import { GET_TRENDING_DATA_KEY, GET_TRENDING_DATA_TTL } from "@/constants/constants";
+import { getCachedTrendingTokens, trendingToolPayload } from "../trending-token/agent";
 
 export const staticResponses = {
   greeting: "Hey, I am TokenMind. Ask me about a token, trending tokens, or Solana stuff.",
@@ -12,7 +9,7 @@ export const staticResponses = {
 
 type Intent =
   | { name: "greeting" | "thanks" | "help"; type: "text"; match: (input: string) => boolean; getText: () => string }
-  | { name: "trending_tokens"; type: "tool"; match: (input: string) => boolean; toolName: "GET_TRENDING_TOKEN"; getPayload: () => Promise<{ result: { body: { tokens: JupiterTokenData[]; prices: number[] } } }>; };
+  | { name: "trending_tokens"; type: "tool"; match: (input: string) => boolean; toolName: "GET_TRENDING_TOKEN"; getPayload: () => Promise<ReturnType<typeof trendingToolPayload>>; };
 
 export type DeterministicIntentName = Intent["name"];
 
@@ -49,33 +46,26 @@ const intents: Intent[] = [
     },
     toolName: "GET_TRENDING_TOKEN",
     getPayload: async () => {
-        const body = await getCachedDataOrFetch({
-            key: GET_TRENDING_DATA_KEY, 
-            ttlSeconds: GET_TRENDING_DATA_TTL, 
-            fetcher: async () => {
-                const { body } = await getTrendingTokens();
-                return body; 
-            }
-        })
-        return { result: { body } };
+      const cached = await getCachedTrendingTokens();
+      return trendingToolPayload(cached);
     },
   },
 ];
 
-export function matchDeterministicIntent(input: string): Intent | null {
+export const matchDeterministicIntent = (input: string): Intent | null => {
   const trimmed = input.trim();
   if (!trimmed) return null;
   return intents.find((intent) => intent.match(trimmed)) ?? null;
 }
 
-export function getDeterministicIntent(name: string): Intent | null {
+export const getDeterministicIntent = (name: string): Intent | null => {
   return intents.find((intent) => intent.name === name) ?? null;
 }
 
-export function resolveDeterministicIntent(
+export const resolveDeterministicIntent = (
   input: string,
   intentName?: string | null
-): Intent | null {
+): Intent | null => {
   if (intentName) {
     const named = getDeterministicIntent(intentName);
     if (named) return named;

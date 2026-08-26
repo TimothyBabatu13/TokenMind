@@ -1,6 +1,7 @@
 import { model } from '@/lib/model'
 import { generateObject } from 'ai'
 import { z } from 'zod'
+import { generatedEvidence } from '@/lib/evidence'
 
 const schema = z.object({
    information: z.string().describe('Detailed information about a query with embedded links in markdown format'),
@@ -37,6 +38,7 @@ export const KnowledgeAgent = async (args: string) => {
         const response = object as SchemaType
         return{
             message: `Here is information about ${args} on SOLANA`,
+            ...generatedEvidence(),
             body: {
                 information: response.information,
                 links: response.links
@@ -46,6 +48,7 @@ export const KnowledgeAgent = async (args: string) => {
         console.log('')
         return{
             message: `Error retrieving inormation on ${args} on SOLANA`,
+            ...generatedEvidence(),
             body: {
                 information: `Failed to get information about ${args} on SOLANA. Please try again later.`,
                 links: [

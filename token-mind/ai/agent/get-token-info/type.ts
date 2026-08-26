@@ -142,4 +142,6 @@ interface TokenData {
 export interface TokenResponse {
   data: TokenData;
   success: boolean;
+  source?: string;
+  fetchedAt?: string;
 }
