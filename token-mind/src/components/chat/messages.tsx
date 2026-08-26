@@ -39,7 +39,28 @@ const MessageText = ({ content, role } : {
                                 {children}
                             </a>
                         ),
-                      }}
+                        table: ({ children }) => (
+                            <div className="my-3 overflow-x-auto rounded-lg border border-border/40">
+                                <table className="w-full border-collapse text-[12.5px]">{children}</table>
+                            </div>
+                        ),
+                        thead: ({ children }) => (
+                            <thead className="bg-white/[0.04]">{children}</thead>
+                        ),
+                        th: ({ children }) => (
+                            <th className="whitespace-nowrap border-b border-border/40 px-2.5 py-2 text-left font-medium text-foreground/60">
+                                {children}
+                            </th>
+                        ),
+                        tr: ({ children }) => (
+                            <tr className="border-b border-border/30 last:border-0 even:bg-white/[0.015]">
+                                {children}
+                            </tr>
+                        ),
+                        td: ({ children }) => (
+                            <td className="px-2.5 py-2 align-top text-foreground/80">{children}</td>
+                        ),
+                    }}
                     >
                        {content}
                     </ReactMarkdown>
