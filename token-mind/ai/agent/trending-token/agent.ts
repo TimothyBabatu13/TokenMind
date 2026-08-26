@@ -1,5 +1,8 @@
 import { BIRD_EYE_API_KEY } from "@/constants/api_keys";
 import { JupiterTokenData } from "./type";
+import { getCachedDataOrFetch } from "@/lib/cache";
+import { GET_TRENDING_DATA_KEY, GET_TRENDING_DATA_TTL } from "@/constants/constants";
+import { birdeyeEvidence, type Evidence } from "@/lib/evidence";
 
 const options = {
   method: 'GET',
@@ -74,6 +77,7 @@ export const getTrendingTokens = async () => {
     
         return {
             message: `Found ${tokens.length} trending tokens. The user is shown the tokens, do not list them. Ask the user what they want to do with the coin.`,
+            ...birdeyeEvidence(),
             body: {
             tokens,
             prices
@@ -88,4 +92,41 @@ export const getTrendingTokens = async () => {
             }
           };
     }
+}
+
+export type CachedTrendingTokens = Evidence & {
+  tokens: JupiterTokenData[];
+  prices: number[];
+};
+
+export const getCachedTrendingTokens = async (): Promise<CachedTrendingTokens> => {
+  return getCachedDataOrFetch({
+    key: GET_TRENDING_DATA_KEY,
+    ttlSeconds: GET_TRENDING_DATA_TTL,
+    fetcher: async () => {
+      const result = await getTrendingTokens();
+      return {
+        tokens: result.body.tokens,
+        prices: result.body.prices,
+        source: "source" in result && result.source ? result.source : "Birdeye",
+        fetchedAt: "fetchedAt" in result && result.fetchedAt
+          ? result.fetchedAt
+          : new Date().toISOString(),
+      };
+    },
+  });
+}
+
+export const trendingToolPayload = (cached: CachedTrendingTokens) => {
+  return {
+    result: {
+      message: `Found ${cached.prices.length} trending tokens. The user is shown the tokens, do not list them. Ask the user what they want to do with the coin.`,
+      source: cached.source,
+      fetchedAt: cached.fetchedAt,
+      body: {
+        tokens: cached.tokens,
+        prices: cached.prices,
+      },
+    },
+  };
 }

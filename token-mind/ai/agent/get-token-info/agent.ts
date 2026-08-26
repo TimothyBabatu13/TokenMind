@@ -1,7 +1,8 @@
 import { BIRD_EYE_API_KEY } from "@/constants/api_keys";
-import { TokenDetails, TokenResponse } from "./type";
+import { TokenResponse } from "./type";
 import { getCachedDataOrFetch } from "@/lib/cache";
 import { TOKEN_INFO_TTL } from "@/constants/constants";
+import { birdeyeEvidence } from "@/lib/evidence";
 
 const options = {
   method: 'GET',
@@ -37,12 +38,17 @@ export const getTokenInfo = async ({ walletAddress } :  {
                 if (!result.success) {
                     throw new Error(`Birdeye returned unsuccessful response for ${walletAddress}`);
                 }
-                return result;
+                return {
+                    ...result,
+                    ...birdeyeEvidence(),
+                };
             },
         });
 
         return {
             message: 'Found Information about this token The user is shown the token, do not list it. Ask the user what they want to do with the coin.',
+            source: response.source ?? "Birdeye",
+            fetchedAt: response.fetchedAt ?? new Date().toISOString(),
             body: {
                 response
             }
