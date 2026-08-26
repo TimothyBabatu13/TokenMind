@@ -9,15 +9,110 @@ import remarkGfm from "remark-gfm";
 import { useEffect, useRef } from "react";
 import { ToolRenderer } from "./tools";
 
+const Markdown = ({ content } : {
+    content: string
+}) => {
+    return(
+    <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={{
+            a: ({ href, children }) => (
+                <a 
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400 hover:text-blue-300 no-underline hover:underline"
+                >
+                    {children}
+                </a>
+            ),
+            h2: ({ children }) => (
+                <h2 className="mt-4 mb-2 max-w-[65ch] text-[11px] font-medium uppercase tracking-wide text-foreground/40 first:mt-0">
+                    {children}
+                </h2>
+            ),
+            table: ({ children }) => (
+                <div className="my-3 w-full overflow-x-auto scroll-area rounded-lg border border-border/40">
+                    <table className="w-max border-collapse text-[12.5px]">{children}</table>
+                </div>
+            ),
+            thead: ({ children }) => (
+                <thead className="bg-white/[0.04]">{children}</thead>
+            ),
+            th: ({ children }) => (
+                <th 
+                    className="whitespace-nowrap border-b border-border/40 px-2.5 py-2 text-left font-medium text-foreground/60"
+                >
+                    {children}
+                </th>
+            ),
+            tr: ({ children }) => (
+                <tr className="border-b border-border/30 last:border-0 even:bg-white/[0.015]">
+                    {children}
+                </tr>
+            ),
+            td: ({ children }) => (
+                <td className="whitespace-nowrap px-2.5 py-2 align-top text-foreground/80">{children}</td>
+            ),
+            ol: ({ children }) => (
+                <ol className="my-2 flex max-w-[65ch] flex-col gap-2 list-none pl-0">{children}</ol>
+            ),
+            ul: ({ children }) => (
+                <ul className="my-2 flex max-w-[65ch] flex-col gap-1.5 list-none pl-0">{children}</ul>
+            ),
+            li: ({ children, ...props }) => {
+                const isOrdered = "ordinal" in props;
+                return (
+                <li className="flex gap-2.5 text-[12.5px] text-foreground/80 leading-relaxed">
+                    <span className="mt-0.5 shrink-0 text-teal-400">
+                        {isOrdered ? (
+                            <span 
+                                className="flex size-[18px] items-center justify-center rounded-full bg-blue-400/15 text-[10px] font-medium text-blue-400"
+                            >
+                                {(props as any).ordinal}
+                            </span>
+                            ) : (
+                            "•"
+                            )
+                        }
+                    </span>
+                <span>
+                    {children}
+                </span>
+            </li>
+        );
+    },
+    p: ({ children }) => (
+        <p className="mb-2 max-w-[65ch] text-[13px] leading-relaxed text-foreground/80 last:mb-0">
+            {children}
+        </p>
+    ),
+    strong: ({ children }) => (
+        <strong className="font-medium text-foreground">{children}</strong>
+    ),
+    }}
+    >
+        {content}
+    </ReactMarkdown>
+    )
+}
+
 
 const MessageText = ({ content, role } : {
     content: string,
     role: "system" | "user" | "assistant" | "data"
 }) => {
+    const isUser = role === "user";
+
     return(
     
         <div 
-            className={`flex min-w-0 flex-col gap-2 text-foreground text-[13px] leading-[1.65] w-fit max-w-[min(80%,56ch)] overflow-hidden break-words rounded-2xl rounded-br-lg border border-border/30 bg-gradient-to-br from-secondary to-muted px-3.5 py-2 shadow-[var(--shadow-card)] ${role === 'user' && 'ml-auto'}`} 
+            className={cn(
+                "flex min-w-0 flex-col gap-2 text-foreground text-[13px] leading-[1.65] break-words",
+                isUser
+                    ? "ml-auto w-fit max-w-[min(80%,56ch)] overflow-hidden rounded-2xl rounded-br-lg border border-border/30 bg-gradient-to-br from-secondary to-muted px-3.5 py-2 shadow-[var(--shadow-card)]"
+                    : "w-full overflow-x-auto"
+            )} 
             data-testid="message-content"
         >
             <div 
@@ -26,24 +121,7 @@ const MessageText = ({ content, role } : {
                 <div 
                     className='prose prose-invert prose-sm sm:prose-base max-w-none prose-p:leading-relaxed prose-a:no-underline'
                 >
-                    <ReactMarkdown
-                        remarkPlugins={[remarkGfm]}
-                        components={{
-                            a: ({ href, children }) => (
-                            <a 
-                                href={href} 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                className="text-blue-400 hover:text-blue-300 underline underline-offset-2"
-                            >
-                                {children}
-                            </a>
-                        ),
-                      }}
-                    >
-                       {content}
-                    </ReactMarkdown>
-                
+                    <Markdown content={content}/>
                 </div>
             </div>
         </div>
@@ -95,7 +173,7 @@ const Messages = () => {
                 
                 {
                     messages.map(message => (
-                        <div key={message.id}>
+                        <div key={message.id} className={message.role === "user" ? "flex justify-end" : "w-full"}>
                             {
                                 message?.parts?.map((part) => {
                                     switch (part.type){
