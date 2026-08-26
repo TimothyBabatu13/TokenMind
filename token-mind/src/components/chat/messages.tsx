@@ -27,13 +27,13 @@ const Markdown = ({ content } : {
                 </a>
             ),
             h2: ({ children }) => (
-                <h2 className="mt-4 mb-2 text-[11px] font-medium uppercase tracking-wide text-foreground/40 first:mt-0">
+                <h2 className="mt-4 mb-2 max-w-[65ch] text-[11px] font-medium uppercase tracking-wide text-foreground/40 first:mt-0">
                     {children}
                 </h2>
             ),
             table: ({ children }) => (
-                <div className="my-3 overflow-x-auto rounded-lg border border-border/40">
-                    <table className="w-full border-collapse text-[12.5px]">{children}</table>
+                <div className="my-3 w-full overflow-x-auto scroll-area rounded-lg border border-border/40">
+                    <table className="w-max border-collapse text-[12.5px]">{children}</table>
                 </div>
             ),
             thead: ({ children }) => (
@@ -52,13 +52,13 @@ const Markdown = ({ content } : {
                 </tr>
             ),
             td: ({ children }) => (
-                <td className="px-2.5 py-2 align-top text-foreground/80">{children}</td>
+                <td className="whitespace-nowrap px-2.5 py-2 align-top text-foreground/80">{children}</td>
             ),
             ol: ({ children }) => (
-                <ol className="my-2 flex flex-col gap-2 list-none pl-0">{children}</ol>
+                <ol className="my-2 flex max-w-[65ch] flex-col gap-2 list-none pl-0">{children}</ol>
             ),
             ul: ({ children }) => (
-                <ul className="my-2 flex flex-col gap-1.5 list-none pl-0">{children}</ul>
+                <ul className="my-2 flex max-w-[65ch] flex-col gap-1.5 list-none pl-0">{children}</ul>
             ),
             li: ({ children, ...props }) => {
                 const isOrdered = "ordinal" in props;
@@ -83,7 +83,7 @@ const Markdown = ({ content } : {
         );
     },
     p: ({ children }) => (
-        <p className="text-[13px] leading-relaxed text-foreground/80 mb-2 last:mb-0">
+        <p className="mb-2 max-w-[65ch] text-[13px] leading-relaxed text-foreground/80 last:mb-0">
             {children}
         </p>
     ),
@@ -108,10 +108,10 @@ const MessageText = ({ content, role } : {
     
         <div 
             className={cn(
-                "flex min-w-0 flex-col gap-2 text-foreground text-[13px] leading-[1.65] overflow-hidden break-words",
+                "flex min-w-0 flex-col gap-2 text-foreground text-[13px] leading-[1.65] break-words",
                 isUser
-                    ? "ml-auto w-fit max-w-[min(80%,56ch)] rounded-2xl rounded-br-lg border border-border/30 bg-gradient-to-br from-secondary to-muted px-3.5 py-2 shadow-[var(--shadow-card)]"
-                    : "w-full max-w-[80%]"
+                    ? "ml-auto w-fit max-w-[min(80%,56ch)] overflow-hidden rounded-2xl rounded-br-lg border border-border/30 bg-gradient-to-br from-secondary to-muted px-3.5 py-2 shadow-[var(--shadow-card)]"
+                    : "w-full overflow-x-auto"
             )} 
             data-testid="message-content"
         >
