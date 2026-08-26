@@ -1,4 +1,4 @@
-import { NaiveBayes } from "./naive-bayes";
+import { NaiveBayes } from "@/lib/naive-bayes";
 
 export type ClassifierIntent = "greeting" | "thanks" | "help" | "trending_tokens" | "other";
 
@@ -249,4 +249,25 @@ for (const [intent, examples] of Object.entries(TRAINING) as [ClassifierIntent, 
   }
 }
 
-export { nb };
+const DETERMINISTIC_INTENTS: ClassifierIntent[] = [
+  "greeting",
+  "thanks",
+  "help",
+  "trending_tokens",
+];
+
+const MIN_CONFIDENCE = 0.5;
+
+export const classifyDeterministicIntent = (text: string): ClassifierIntent | null => {
+  const trimmed = text.trim();
+  if (!trimmed) return null;
+
+  const [category, probability] = nb.categorize(trimmed);
+  if (!category || category === "other") return null;
+  if (probability < MIN_CONFIDENCE) return null;
+  if (!DETERMINISTIC_INTENTS.includes(category as ClassifierIntent)) return null;
+
+  return category as ClassifierIntent;
+}
+
+export { nb, TRAINING };
