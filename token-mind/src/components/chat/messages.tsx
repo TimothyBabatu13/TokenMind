@@ -14,10 +14,17 @@ const MessageText = ({ content, role } : {
     content: string,
     role: "system" | "user" | "assistant" | "data"
 }) => {
+    const isUser = role === "user";
+
     return(
     
         <div 
-            className={`flex min-w-0 flex-col gap-2 text-foreground text-[13px] leading-[1.65] w-fit max-w-[min(80%,56ch)] overflow-hidden break-words rounded-2xl rounded-br-lg border border-border/30 bg-gradient-to-br from-secondary to-muted px-3.5 py-2 shadow-[var(--shadow-card)] ${role === 'user' && 'ml-auto'}`} 
+            className={cn(
+                "flex min-w-0 flex-col gap-2 text-foreground text-[13px] leading-[1.65] overflow-hidden break-words",
+                isUser
+                    ? "ml-auto w-fit max-w-[min(80%,56ch)] rounded-2xl rounded-br-lg border border-border/30 bg-gradient-to-br from-secondary to-muted px-3.5 py-2 shadow-[var(--shadow-card)]"
+                    : "w-full max-w-[80%]"
+            )} 
             data-testid="message-content"
         >
             <div 
@@ -116,7 +123,7 @@ const Messages = () => {
                 
                 {
                     messages.map(message => (
-                        <div key={message.id}>
+                        <div key={message.id} className={message.role === "user" ? "flex justify-end" : "w-full"}>
                             {
                                 message?.parts?.map((part) => {
                                     switch (part.type){
