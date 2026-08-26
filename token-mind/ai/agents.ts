@@ -14,7 +14,7 @@ export const getTrendingTokensAgent = tool({
 })
 
 export const getKnowledgeAgent = tool({
-    description: 'A knowledgeable assistant that provides information about Solana protocols, documentation, concepts and tools. Provide concise, accurate information with a well-structured response. Pass the user question as "info" (or "topic").',
+    description: 'A knowledgeable assistant that provides information about Solana protocols, documentation, concepts and tools. Structure responses using proper markdown: numbered lists for sequential steps, bullet lists for tips, and a "## Further reading" heading followed by a markdown link list for resources — never bold-label paragraphs strung together. Pass the user question as "info" (or "topic").',
     parameters: z.object({
         info: z.string().optional().describe('The user question or topic about Solana blockchain protocols, developer tools, documentation, or key concepts.'),
         topic: z.string().optional().describe('Alias for info. The user question or topic about Solana.'),
